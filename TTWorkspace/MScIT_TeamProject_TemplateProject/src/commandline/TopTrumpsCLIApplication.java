@@ -1,5 +1,7 @@
 package commandline;
 
+import java.util.Scanner;
+
 /**
  * Top Trumps command line application
  */
@@ -24,12 +26,27 @@ public class TopTrumpsCLIApplication {
 			// ----------------------------------------------------
 			// Add your game logic here based on the requirements
 			// ----------------------------------------------------
-			
+			TopTrumpsCLIApplication start = new TopTrumpsCLIApplication();
+			start.gameOrStats(start);
 			userWantsToQuit=true; // use this when the user wants to exit the game
 			
 		}
-
-
+	}
+	
+	public void gameOrStats(TopTrumpsCLIApplication start) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Do you want to see past results or play a game?\n	1: Print Game Statistics\n	2: Play Game\nEnter the number for your selection:");
+		int gameOrStats = scanner.nextInt();
+		System.out.println(gameOrStats);//print for testing
+		
+		if(gameOrStats==1) {
+			System.out.println("Program will now display stats");//print for testing
+//Maz to add call to data base here
+			start.gameOrStats(start);
+		}else if(gameOrStats==2) {
+			System.out.println("A new game will now start");//print for testing
+			Game game = new Game();
+		}
 	}
 
 }
