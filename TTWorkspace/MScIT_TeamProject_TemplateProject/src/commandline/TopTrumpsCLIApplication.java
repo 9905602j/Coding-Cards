@@ -44,9 +44,8 @@ public class TopTrumpsCLIApplication {
 //Maz to add call to data base here
 			start.gameOrStats(start);
 		}else if(gameOrStats==2) {
-			System.out.println("A new game will now start");//print for testing
 			Game game = new Game();
-		}
+			game.play();		}
 	}
 
 }
