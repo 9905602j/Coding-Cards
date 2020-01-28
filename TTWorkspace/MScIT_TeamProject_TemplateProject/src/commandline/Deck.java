@@ -1,54 +1,45 @@
 package commandline;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class Deck {
 	
-	private Card[]cards;
-	
-	private int nextCardPos;
+	private ArrayList<Card> cards;
 	
 	public Deck(int sizeOfDeck) {
-		nextCardPos = 0;
-		cards = new Card[sizeOfDeck];
+		cards = new ArrayList<Card>(sizeOfDeck);
 	}
 	
 	public void addNewCard(Card card) {
-		cards[nextCardPos] = card;
-		nextCardPos++;
+		cards.add(card);
 	}
 	
 	public void shuffle() {
-		Card[]shuffledDeck = new Card[cards.length];
-		int i = 0;
-		while(i<cards.length) {
-			Random card = new Random();
-			int randomIndex = card.nextInt(cards.length);
-			if(cards[randomIndex]==null) {
-			}else {
-				shuffledDeck[i] = cards[randomIndex];
-				cards[randomIndex]=null;
-				i++;
-			}
-		}
-		cards = shuffledDeck;
+		Collections.shuffle(cards);
 	}
 	
 	public void dealCards(Player[] players) {
-
-		for(int i = 0;i<cards.length;i = i+4) {
+		
+		for(int i = 0;i<cards.size();i = i+4) {
 			for(int j = 0;j<players.length;j++) {
-				players[j].getHand().addNewCard(cards[i+j]);
+				players[j].getHand().addNewCard(cards.get(i+j));
 			}
 		}
 	}
 	
+	public Card getTopCard() {
+		return cards.get(0);
+	}
+	
+	public int getSize() {
+		return cards.size();
+	}
+	
 	public void testPrint() {
-		for(int i=0;i<cards.length;i++) {
-			System.out.println(cards[i].toString());
+		for(int i=0;i<cards.size();i++) {
+			System.out.println(cards.get(i).toString());
 		}
 	}
 	

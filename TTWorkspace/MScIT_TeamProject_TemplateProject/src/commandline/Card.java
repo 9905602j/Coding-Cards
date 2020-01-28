@@ -13,6 +13,14 @@ public class Card {
 		}
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public int getAttributeValue(int i) {
+		return attributeValues[i];
+	}
+	
 	public String toString() {
 		String card = name;
 		for(int i=0; i<attributeValues.length;i++) {
