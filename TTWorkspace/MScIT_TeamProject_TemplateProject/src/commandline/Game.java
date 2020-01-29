@@ -2,6 +2,7 @@ package commandline;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -12,15 +13,17 @@ public class Game {
 	private final int numberOfPlayers = 4;
 	private final int humanPlayer = 0;
 	
-	private Player[] players = new Player[numberOfPlayers];
+	private ArrayList <Player> players = new ArrayList<Player>(numberOfPlayers);
 	private int activePlayer;
 	
 	private String[] categories;
 	private Deck fullDeck;
-	private Deck communalPile = new Deck(sizeOfDeck);
+	private Deck communalPile = new Deck(0);
 	
 	private int roundNum;
 	private boolean isDraw = false;
+	private int numberOfDraws = 0;
+	private boolean gameOver = false;
 
 	
 
@@ -37,8 +40,9 @@ public class Game {
 //make all players and deal out they're hands from the shuffled main deck
 		makePlayers();
 		fullDeck.dealCards(players);
+//Mick to add writting of players hands to test log
 		
-		pickFirstPlayer();
+		pickActivePlayer();
 		roundNum = 1;
 		
 		}
@@ -73,33 +77,52 @@ public class Game {
 
 	public void makePlayers() {
 		HumanPlayer h = new HumanPlayer(sizeOfDeck/numberOfPlayers, 1);
-		players[humanPlayer] = h;
+		players.add(humanPlayer, h);
 		for(int i = 1;i<numberOfPlayers;i++) {
 			AIPlayer p = new AIPlayer(sizeOfDeck/numberOfPlayers, (i+1));
-			players[i] = p;
+			players.add(i, p);
 		}
 	}
 	
-	public void pickFirstPlayer() {
+	public void pickActivePlayer() {
 		Random r = new Random();
-		activePlayer = r.nextInt(numberOfPlayers);
+		activePlayer = r.nextInt(players.size());
 	}
 	
 	public void play() {
+		for(int i=0; i<numberOfPlayers; i++) {
+			players.get(i).playerPrint();
+		}
 		System.out.println("Game Start");
-		playRound();
-		
+		while(gameOver==false) {
+			playRound();
+			for(int j=0; j<players.size(); j++) {
+				players.get(j).playerPrint();
+			}
+			System.out.println("\n The communal pile is \n");
+			communalPile.testPrint();
+		}
+		System.out.println("\n\nGame End");
 	}
 	
 	public void playRound() {
 		displayRoundStart();
-		int categoryPicked = players[activePlayer].pickCategory(numberOfCategories, categories);
+		int categoryPicked = players.get(activePlayer).pickCategory(numberOfCategories, categories);
 		System.out.println("The cat picked was: " + categoryPicked);
 		Player wonRound = findWinningPlayer(categoryPicked);
+		Card winner = wonRound.getHand().getTopCard();
+
+		if(isDraw==false) {
+			giveCardsToWinner(wonRound);
+			giveComPileToWinner(wonRound);
+			moveWinnersTopCard(wonRound);
+		}else {
+			putCardsInCommunalPile();
+		}
+		checkForLosers();
 		displayRoundResult(wonRound, categoryPicked);
-		displayWinningCard(wonRound, categoryPicked);
-		
-		System.out.println("The current active player is: " + activePlayer);
+		displayWinningCard(winner, categoryPicked);
+		isItOver();
 		roundNum++;
 		
 	}
@@ -107,40 +130,42 @@ public class Game {
 	public void displayRoundStart() {
 		System.out.println("Round " + roundNum);
 		System.out.println("Round " + roundNum + ": Players have drawn their cards");
-		System.out.println("You drew '" + players[0].getTopCard().getName() + "':");
-		
-		for(int i=0;i<categories.length;i++) {
-			System.out.println("\t> " + categories[i] + ": " + players[humanPlayer].getTopCard().getAttributeValue(i));
+		if(players.get(humanPlayer) instanceof HumanPlayer) {
+			System.out.println("You drew '" + players.get(humanPlayer).getTopCard().getName() + "':");
+			for(int i=0;i<categories.length;i++) {
+				System.out.println("\t> " + categories[i] + ": " + players.get(humanPlayer).getTopCard().getAttributeValue(i));
+			}
+			System.out.println("There are '" + players.get(humanPlayer).getHand().getSize() + " cards in your deck");
 		}
-		
-		System.out.println("There are '" + players[humanPlayer].getHand().getSize() + " cards in your deck");
 	}
 	
 	public Player findWinningPlayer(int catPicked) {
 		int toBeat = 0;
 		int nextActivePlayer = 0;
-		Player wonRound = players[0];
-		for(int i =0;i<players.length;i++) {
-			int contender = players[i].getTopCard().getAttributeValue(catPicked);
-			if(contender>toBeat) {
+		Player wonRound = players.get(0);
+		for(int i =0;i<players.size();i++) {
+			int contender = players.get(i).getTopCard().getAttributeValue(catPicked);
+			if(contender==toBeat) {
+				isDraw = true;
+			}else if(contender>toBeat) {
 				toBeat = contender;
-				wonRound = players[i];
+				wonRound = players.get(i);				
 				nextActivePlayer = i;
 				isDraw = false;
-			}else if(contender==toBeat) {
-				isDraw = true;
 			}
 		}
 		if(isDraw==false) {
 			activePlayer= nextActivePlayer;
+		}else {
+			numberOfDraws++;
 		}
 		return wonRound;
 	}
 	
 	public void displayRoundResult(Player wonRound, int catPicked) {
 		if(isDraw==true){
-			System.out.println("Round " + roundNum + ": This round is a draw");
-		}else if(wonRound==players[humanPlayer]) {
+			System.out.println("Round " + roundNum + ": This round is a draw, common pile now has " + communalPile.getSize() + " cards" );
+		}else if(wonRound instanceof HumanPlayer) {
 			System.out.println("Round " + roundNum +": Player you won this round");
 		}else {
 			System.out.println("Round " + roundNum + ": Player " + wonRound.getID() + " won this round");
@@ -148,14 +173,61 @@ public class Game {
 		
 	}
 	
-	public void displayWinningCard(Player wonRound, int catPicked) {
-		System.out.println("The winning card was: '" + wonRound.getTopCard().getName() + "'");
+	public void displayWinningCard(Card winner, int catPicked) {
+		System.out.println("The winning card was: '" + winner.getName() + "'");
 		for(int i=0;i<categories.length;i++) {
 			if(catPicked == i) {
-				System.out.println("\t> " + categories[i] + ": " + wonRound.getTopCard().getAttributeValue(i) + " <--");
+				System.out.println("\t> " + categories[i] + ": " + winner.getAttributeValue(i) + " <--");
 			}else {
-				System.out.println("\t> " + categories[i] + ": " + wonRound.getTopCard().getAttributeValue(i));
+				System.out.println("\t> " + categories[i] + ": " + winner.getAttributeValue(i));
 			}
+		}
+	}
+	
+	public void giveCardsToWinner(Player winner) {
+		for(int i = 0;i<players.size();i++) {
+			if(!(players.get(i)==winner)) {
+				Card card = players.get(i).getHand().getTopCard();
+				players.get(i).getHand().removeTopCard();
+				winner.getHand().addNewCard(card);
+			}
+		}
+	}
+	
+	public void putCardsInCommunalPile() {
+		for(int i=0; i<players.size(); i++) {
+			Card card = players.get(i).getHand().getTopCard();
+			players.get(i).getHand().removeTopCard();
+			communalPile.addNewCard(card);
+		}
+	}
+	
+	public void giveComPileToWinner(Player winner) {
+		for(int i=0; i<communalPile.getSize(); i++) {
+			winner.getHand().addNewCard(communalPile.getCard(i));
+		}
+		communalPile.clearDeck();
+	}
+	
+	
+	public void moveWinnersTopCard(Player winner) {
+		Card toMove = winner.getTopCard();
+		winner.getHand().removeTopCard();
+		winner.getHand().addNewCard(toMove);
+	}
+	
+	public void checkForLosers() {
+		for(int i=0;i<players.size();i++) {
+			if(players.get(i).getHand().getSize()==0){
+				players.remove(i);
+				i--;
+			}
+		}
+	}
+	
+	public void isItOver() {
+		if(players.size()<2) {
+			gameOver = true;
 		}
 	}
 	

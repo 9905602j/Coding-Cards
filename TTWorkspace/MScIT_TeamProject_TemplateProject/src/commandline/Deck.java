@@ -20,11 +20,11 @@ public class Deck {
 		Collections.shuffle(cards);
 	}
 	
-	public void dealCards(Player[] players) {
+	public void dealCards(ArrayList<Player> players) {
 		
 		for(int i = 0;i<cards.size();i = i+4) {
-			for(int j = 0;j<players.length;j++) {
-				players[j].getHand().addNewCard(cards.get(i+j));
+			for(int j = 0;j<players.size();j++) {
+				players.get(j).getHand().addNewCard(cards.get(i+j));
 			}
 		}
 	}
@@ -35,6 +35,18 @@ public class Deck {
 	
 	public int getSize() {
 		return cards.size();
+	}
+	
+	public void removeTopCard() {
+		cards.remove(0);
+	}
+	
+	public Card getCard(int i) {
+		return cards.get(i);
+	}
+	
+	public void clearDeck(){
+		cards.clear();
 	}
 	
 	public void testPrint() {
