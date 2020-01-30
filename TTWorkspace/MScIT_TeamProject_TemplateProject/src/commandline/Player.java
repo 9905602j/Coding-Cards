@@ -4,11 +4,13 @@ abstract class Player {
 	private int playerID;
 	private int sizeOfHand;
 	private Deck playersHand;
+	private int roundsWon;
 	
 	public Player(int sizeOfHand, int ID) {
 		this.sizeOfHand = sizeOfHand;
 		this.playerID = ID;
 		playersHand = new Deck(sizeOfHand);
+		roundsWon = 0;
 	}
 	
 	public Deck getHand() {
@@ -21,6 +23,14 @@ abstract class Player {
 	
 	public int getID() {
 		return playerID;
+	}
+	
+	public void incrementRoundsWon() {
+		roundsWon++;
+	}
+	
+	public int getRoundsWon() {
+		return roundsWon;
 	}
 	
 	public void playerPrint() {
