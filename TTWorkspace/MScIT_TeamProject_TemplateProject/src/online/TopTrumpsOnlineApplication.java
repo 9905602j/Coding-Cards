@@ -12,6 +12,7 @@ import online.dwResources.TopTrumpsRESTAPI;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
+import game.Game;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -56,8 +57,11 @@ public class TopTrumpsOnlineApplication extends Application<TopTrumpsJSONConfigu
 	    // Dropwizard expresses things that the user can ask for as resources. We have two of
 	    // these, the REST api and the HTML/Javascript Webpages
 	    
+	    // This is our game
+	    Game game = new Game();
+	    
 	    // REST API
-		TopTrumpsRESTAPI restAPI = new TopTrumpsRESTAPI(conf);
+		TopTrumpsRESTAPI restAPI = new TopTrumpsRESTAPI(conf, game);
 		
 		// HTML/Javascript Webpages
 		GameWebPagesResource gameScreen = new GameWebPagesResource();
@@ -65,6 +69,7 @@ public class TopTrumpsOnlineApplication extends Application<TopTrumpsJSONConfigu
 		// Registration tells Dropwizard to host a resource
 		environment.jersey().register(restAPI);
 		environment.jersey().register(gameScreen);
+		
 	}
 
     

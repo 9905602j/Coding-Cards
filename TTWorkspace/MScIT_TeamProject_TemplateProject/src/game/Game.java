@@ -1,4 +1,4 @@
-package commandline;
+package game;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -114,7 +114,9 @@ public class Game {
 		}
 		System.out.println("Game Start");
 		while(gameOver==false) {
-			playRound();
+			displayRoundStart();
+			int categoryPicked = players.get(activePlayer).pickCategory(numberOfCategories, categories);
+			playRound(categoryPicked);
 			for(int j=0; j<players.size(); j++) {
 				players.get(j).playerPrint();
 			}
@@ -143,7 +145,7 @@ public class Game {
 //This second bit would pass each players ID and how many rounds they won to the DB handler class.
 	}
 	
-	public void playRound() {
+	public void playRound(int categoryPicked) {
 		
 //Mick, to put in a call to write the top cards of each player to the test log. See the code in 
 //displayStartOfRound() method below for ideas on how to do this as it prints out the players
@@ -154,8 +156,6 @@ public class Game {
 		//}
 //This is just of the top of my head though so don't take that as a given...
 		
-		displayRoundStart();
-		int categoryPicked = players.get(activePlayer).pickCategory(numberOfCategories, categories);
 		
 //Mick to put in a call to write the category and it's values to the test log here. You should be able 
 //to do this by passing it the above int (categoryPicked), and each players top card 
