@@ -14,6 +14,11 @@ public class TopTrumpsCLIApplication {
 	 */
 	public static void main(String[] args) {
 
+//Mick, we should only write to the test log when this boolean is true (the setting of this is already 
+//handled for us in the code provided). At the moment I'm thinking we'll pass this to Game and then put 
+//put all your method calls in if() statements, this feels a bit hacky though, so I'll get some advice 
+//and come back to you.
+
 		boolean writeGameLogsToFile = false; // Should we write game logs to file?
 		if (args[0].equalsIgnoreCase("true")) writeGameLogsToFile=true; // Command line selection
 		
@@ -41,7 +46,12 @@ public class TopTrumpsCLIApplication {
 		
 		if(gameOrStats==1) {
 			System.out.println("Program will now display stats");//print for testing
-//Maz to add call to data base here
+			
+//Maz to add call to data base here. You'll need to write a method in your DBHandler class that will pass
+//the info we need to display from the DB back to here. You'll then need to write some code in this class
+//to display it to the user. For neatness I would suggest writing the display code in a separate method 
+//below gameOrStats that gets called from where this comment is.
+			
 			start.gameOrStats(start);
 		}else if(gameOrStats==2) {
 			Game game = new Game();
