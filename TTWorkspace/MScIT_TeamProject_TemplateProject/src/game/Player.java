@@ -1,4 +1,4 @@
-package commandline;
+package game;
 
 abstract class Player {
 	private int playerID;

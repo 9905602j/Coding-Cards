@@ -37,6 +37,11 @@
 				// You can call other methods you want to run when the page first loads here
 				// --------------------------------------------------------------------------
 				
+				// A REALLY USEFUL THING TO DO HERE WOULD BE TO DISPLAY THE CURRENT
+				// STATE OF THE GAME
+				getAndDisplayGameState();
+				
+				
 				// For example, lets call our sample methods
 				helloJSONList();
 				helloWord("Student");
@@ -76,6 +81,32 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
+		
+			// Get and display the current game state
+			function getAndDisplayGameState() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game_state");
+				xhr.onload = function(e) {
+					var responseText = xhr.response;
+					displayGameState(responseText);
+					};
+					
+				xhr.send();			
+			}
+		
+			function displayGameState(response) {
+				$('#gameStateDiv').text(response);
+			}
+			
+			// Send a choice of category to the server
+			function chooseCategory(category) {
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/choose_category?category="+category);
+				xhr.onload = function(e) {
+					alert(xhr.response);
+					getAndDisplayGameState();
+				};
+					
+				xhr.send();			
+			}
 		
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {
@@ -122,6 +153,15 @@
 			}
 
 		</script>
+		<h1>Top Trumps</h1>
+		<div id="gameStateDiv">
+		The game state will appear here once it loads.
+		</div>
+		<button onclick="chooseCategory(1);">1</button>
+		<button onclick="chooseCategory(2);">2</button>
+		<button onclick="chooseCategory(3);">3</button>
+		<button onclick="chooseCategory(4);">4</button>
+		<button onclick="chooseCategory(5);">5</button>
 		
 		</body>
 </html>
