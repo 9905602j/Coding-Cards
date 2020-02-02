@@ -36,12 +36,12 @@ public class TopTrumpsCLIApplication {
 			// Add your game logic here based on the requirements
 			// ----------------------------------------------------
 			
-			userWantsToQuit = start.gameOrStats();
+			userWantsToQuit = start.gameOrStats(writeGameLogsToFile);
 			
 		}
 	}
 	
-	public boolean gameOrStats() {
+	public boolean gameOrStats(boolean writeLog) {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Do you want to see past results or play a game?\n\t1: Print Game Statistics\n\t2: Play Game\n\t3: Quit\nEnter the number for your selection:");
 		int gameOrStats = scanner.nextInt();
@@ -54,7 +54,7 @@ public class TopTrumpsCLIApplication {
 //the DB and then display the info to the console. 
 			return false;
 		}else if(gameOrStats==2) {
-			Game game = new Game();
+			Game game = new Game(writeLog);
 			game.play();
 			return false;
 		}
