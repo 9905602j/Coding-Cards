@@ -58,7 +58,7 @@ public class TopTrumpsOnlineApplication extends Application<TopTrumpsJSONConfigu
 	    // these, the REST api and the HTML/Javascript Webpages
 	    
 	    // This is our game
-	    Game game = new Game();
+	    Game game = new Game(false);
 	    
 	    // REST API
 		TopTrumpsRESTAPI restAPI = new TopTrumpsRESTAPI(conf, game);

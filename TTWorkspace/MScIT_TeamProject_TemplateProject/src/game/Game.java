@@ -13,6 +13,8 @@ public class Game {
 	private final int numberOfPlayers = 4;
 	private final int humanPlayer = 0;
 	
+	private boolean writeGameLogsToFile;
+	
 	private ArrayList <Player> players = new ArrayList<Player>(numberOfPlayers);
 	private Player[] startingPlayers = new Player[numberOfPlayers];
 	private int activePlayer;
@@ -30,7 +32,8 @@ public class Game {
 
 	
 	
-	public Game() {
+	public Game(boolean writeLog) {
+		writeGameLogsToFile = writeLog;
 		
 //read deck in from file and shuffle it.
 		makeFullDeck();
