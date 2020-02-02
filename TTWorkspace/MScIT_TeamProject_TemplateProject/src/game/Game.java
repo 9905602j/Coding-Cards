@@ -15,10 +15,12 @@ public class Game {
 	
 	private boolean writeGameLogsToFile;
 	
+	private Player wonRound;
 	private ArrayList <Player> players = new ArrayList<Player>(numberOfPlayers);
 	private Player[] startingPlayers = new Player[numberOfPlayers];
 	private int activePlayer;
 	
+	private Card winner;
 	private String[] categories;
 	private Deck fullDeck;
 	private Deck communalPile = new Deck(0);
@@ -120,6 +122,8 @@ public class Game {
 			displayRoundStart();
 			int categoryPicked = players.get(activePlayer).pickCategory(numberOfCategories, categories);
 			playRound(categoryPicked);
+			displayRoundResult(wonRound, categoryPicked);
+			displayWinningCard(winner, categoryPicked);
 			for(int j=0; j<players.size(); j++) {
 				players.get(j).playerPrint();
 			}
@@ -167,8 +171,8 @@ public class Game {
 //little messy to me...
 		
 		System.out.println("The cat picked was: " + categoryPicked);
-		Player wonRound = findWinningPlayer(categoryPicked);
-		Card winner = wonRound.getHand().getTopCard();
+		wonRound = findWinningPlayer(categoryPicked);
+		winner = wonRound.getHand().getTopCard();
 
 		if(isDraw==false) {
 			giveCardsToWinner(wonRound);
@@ -188,8 +192,7 @@ public class Game {
 			
 		}
 		checkForLosers();
-		displayRoundResult(wonRound, categoryPicked);
-		displayWinningCard(winner, categoryPicked);
+
 		
 //Mick, to put in writing the contents of each deck at the end of the round to the test log.
 //Please see all the other notes about writting the various decks to the log...
