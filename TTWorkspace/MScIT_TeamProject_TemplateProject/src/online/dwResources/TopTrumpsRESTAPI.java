@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import game.Game;
+import game.HumanPlayer;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
 @Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
@@ -60,17 +61,22 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/game_state")
 	public String gameState() throws IOException {
-		
-		// RUN THE GAME UNTIL WE NEED SOME MORE INPUT HERE,
-		// AND RETURN THE PROGRESS ON THE GAME AS A STRING
+// RUN THE GAME UNTIL WE NEED SOME MORE INPUT HERE,
+// AND RETURN THE PROGRESS ON THE GAME AS A STRING
+//So right now it runs the start of the round and displays the appropriate info to the user
+//then the program waits for input, when it gets it it calls choose category below
+		game.startRoundOnline();
 		return oWriter.writeValueAsString(game.toString());
 	}
 	
 	@POST
 	@Path("/choose_category")
 	public String chooseCategory(@QueryParam("category") int category) throws IOException {
-		// Call some method on game to indicate that the player has picked!
-		return "OK, you picked something - you picked category "+Integer.toString(category);
+//once input has been given by the user it is passed to the game and processed
+		game.playRound(category - 1);
+//gets the gameState to update and then passes the new String back to the API for display
+		game.finishRoundOnline();
+		return oWriter.writeValueAsString(game.toString());
 	}
 	
 	@GET

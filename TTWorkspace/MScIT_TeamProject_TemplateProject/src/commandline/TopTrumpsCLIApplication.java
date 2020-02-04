@@ -40,25 +40,27 @@ public class TopTrumpsCLIApplication {
 			
 		}
 	}
-	
+//find out if the player would like to play, view stats or quit
 	public boolean gameOrStats(boolean writeLog) {
+//get the players choice
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Do you want to see past results or play a game?\n\t1: Print Game Statistics\n\t2: Play Game\n\t3: Quit\nEnter the number for your selection:");
 		int gameOrStats = scanner.nextInt();
 		System.out.println(gameOrStats);//print for testing
-		
+//display stats		
 		if(gameOrStats==1) {
 			System.out.println("Program will now display stats");//print for testing
 			
 //Maz to add call to data base here. You'll need to write a method in your DBHandler class that will call
 //the DB and then display the info to the console. 
 			return false;
+//start game
 		}else if(gameOrStats==2) {
-			Game game = new Game(writeLog);
-			game.play();
+			Game game = new Game(writeLog, false);
+			game.playCL();
 			return false;
 		}
-		// If the user wants to quit, gameOrStats == 3 here
+// If the user wants to quit, gameOrStats == 3 here
 		return true;
 		
 	}
