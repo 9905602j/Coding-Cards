@@ -51,6 +51,10 @@ public class Deck {
 	public void clearDeck(){
 		cards.clear();
 	}
+	
+	public ArrayList getDeck() {
+		return cards;
+	}
 //used to print out decks during dev to help with debugging
 	public void testPrint() {
 		for(int i=0;i<cards.size();i++) {

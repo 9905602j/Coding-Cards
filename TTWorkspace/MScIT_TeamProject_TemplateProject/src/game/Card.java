@@ -4,8 +4,10 @@ public class Card {
 	private String name;
 	private final int numOfAttributes;
 	private int [] attributeValues;
+	private String [] categories;
 
-	public Card(String cardDetails, int numberOfCats) {
+	public Card(String cardDetails, int numberOfCats, String [] cats) {
+		categories = cats;
 		numOfAttributes = numberOfCats;
 //make the array to store the values of the cards attributes
 		attributeValues = new int [numOfAttributes];
@@ -26,12 +28,19 @@ public class Card {
 	public int getAttributeValue(int i) {
 		return attributeValues[i];
 	}
-//returns a string containnig all the deatils of a card
-//used for debugging and for display to the user
+//returns a string containing all the details of a card
 	public String toString() {
 		String card = name;
 		for(int i=0; i<attributeValues.length;i++) {
 			card = card + " " + attributeValues[i];
+		}
+		return card;
+	}
+	
+	public String allDetailsPrint() {
+		String card = "\t" + name + "\n";
+		for(int i=0; i<attributeValues.length;i++) {
+			card = card + "\t" + categories[i] + ": " +  attributeValues[i] + "\n";
 		}
 		return card;
 	}

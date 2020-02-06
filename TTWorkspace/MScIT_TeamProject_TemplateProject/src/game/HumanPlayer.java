@@ -23,7 +23,6 @@ public class HumanPlayer extends Player {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter the number for your attribute:");
 		int catPicked = scanner.nextInt()-1;
-		scanner.close();
 		return catPicked;
 	}
 

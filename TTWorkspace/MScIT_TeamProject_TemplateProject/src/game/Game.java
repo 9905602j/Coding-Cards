@@ -16,6 +16,7 @@ public class Game {
 //booleans of games current running state	
 	private boolean writeGameLogsToFile;
 	private boolean runningOnline;
+	private TestLogHandler testLog;
 	
 //ArrayList used to store all players currently in the game, players are removed once they loose
 	private ArrayList <Player> players = new ArrayList<Player>(numberOfPlayers);
@@ -48,24 +49,23 @@ public class Game {
 //set booleans to allow appropriate running for each mode, command line, online and writing test log
 		writeGameLogsToFile = writeLog;
 		runningOnline = online;
+		if(writeGameLogsToFile==true) {
+			testLog = new TestLogHandler();
+		}
 		
 //read deck in from file and shuffle it.
 		makeFullDeck();
 		fullDeck.shuffle();
-		
-//Mick to add writing of shuffled deck to test log, see the note about writing in the unshuffled deck 
-//below for more details, it should be pretty much the same, you may even be able to use the same write 
-//method every time you need to write a deck to the log, this includes all players hands and communal 
-//pile as well as the actual deck.
+		if(writeGameLogsToFile==true) {
+			testLog.shuffledDeckPrint(fullDeck);
+		}
 
-//make all players and deal out they're hands from the shuffled main deck
+//make all players and deal out their hands from the shuffled main deck
 		makePlayers();
 		fullDeck.dealCards(players);
-		
-//Mick to add writing of players hands to test log. See the note on writting in the suffled and unshuffled 
-//decks above and below for the details of writting in the players hands/decks. As for determining which one
-//is the human player and which are AI's you may be able to use the instanceof operator (see displayRoundStart() 
-//method below for an example of it's use), also bare in mind that the human players ID should always be player 1.
+		if(writeGameLogsToFile==true) {
+			testLog.playersInitialHandsPrint(players);
+		}
 
 //randomly pick player to take first turn and start the round counter
 		pickActivePlayer();
@@ -79,7 +79,7 @@ public class Game {
 		try {
 			deckReader = new FileReader("StarCitizenDeck.txt");
 			Scanner scanner = new Scanner(deckReader);
-//pass by and seperate values by white space when reading from file
+//pass by and separate values by white space when reading from file
 			scanner.useDelimiter("\\s+");
 			scanner.next();
 //capture what categories the deck has, eg size etc			
@@ -95,23 +95,16 @@ public class Game {
 			for(int i = 0; i<sizeOfDeck; i++) {
 //get each cards details as a String from the file and pass to cards constructor 
 				String cardDetails = scanner.nextLine();
-				Card card = new Card(cardDetails, numberOfCategories);
+				Card card = new Card(cardDetails, numberOfCategories, categories);
 				fullDeck.addNewCard(card);
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-//Mick to add in writing full unshuffeled deck to test log. You'll need to write a method in you test
-//log handler class that will take the fulldeck Deck object and then write the details to the log. There is 
-//a print method (testPint()) in the Deck class you can use to help you, I've been using it to print out decks for 
-//debugging as I've gone along. You should be able to pretty much copy that code into your test log class to do the 
-//printing to file. Below is an suggestion/example of what I mean.
-		
-		//TestLog t = new TestLog();
-		//writeInUnsuffledDeck(fulldeck);
-		
-
+		if(writeGameLogsToFile==true) {
+			testLog.fullUnshuffledDeckPrint(fullDeck);
+		}
 	}
 	
 //makes the players and adds them to the array list players and array startingPlayers
@@ -174,10 +167,9 @@ public class Game {
 //If the game exits the loop it is over.
 //displays the results of the game to the user.
 		System.out.println(displayGameEnd());
-		
-//Mick, to put in writing the winner of the game to the test log here. The winner will be the only 
-//Player left in the players ArrayList at this point. 
-		
+		if(writeGameLogsToFile==true) {
+			testLog.recordWinner(players.get(0));
+		}
 // Maz you should be able to add writing everything that needs to be saved at the end of the 
 //game to the DB in here. There should be attributes for everything that you need to pass to the 
 //DB in this class. Write a method in your DBHandler class to take them and write them to the DB 
@@ -224,22 +216,9 @@ public class Game {
 
 //used by both command line and web based versions to play through the details of a round once a category has been picked
 	public void playRound(int categoryPicked) {
-		
-//Mick, to put in a call to write the top cards of each player to the test log. See the code in 
-//displayStartOfRound() method below for ideas on how to do this as it prints out the players
-//active card to the console. I would think you would need to pass the testlog class a copy of the 
-//players decks and the categories array. E.g.
-		//for(int i=0;i<players.size();i++){
-			//writeActiveCardsToTL(players(i).get().getHand(), categories)
-		//}
-//This is just of the top of my head though so don't take that as a given...
-		
-		
-//Mick to put in a call to write the category and it's values to the test log here. You should be able 
-//to do this by passing it the above int (categoryPicked), and each players top card 
-//e.g. in a for loop: players.get(i).getHand().getTopCard();
-//Again this is off the top of my head, if you see a neater way to do it go ahead, alot of this seems a 
-//little messy to me...
+		if(writeGameLogsToFile==true) {
+		testLog.printTopCards(players, roundNum);
+		}
 		
 //when playing online if the active player is the human player input from the button = catPicked,
 //if it is an AI player we need to call the AI's pick method to get catPicked
@@ -248,6 +227,9 @@ public class Game {
 		}else {
 			catPicked = categoryPicked;
 		}
+		if(writeGameLogsToFile==true) {
+			testLog.categoryAndValuesPrint(catPicked, categories, players);
+		}
 //find which player won the round
 		wonRound = findWinningPlayer(catPicked);
 //find which card they won with so we can display the details
@@ -255,28 +237,18 @@ public class Game {
 //if the round was not a draw give all the right cards to the winner and move their winning card to the back of their hand
 		if(isDraw==false) {
 			giveCardsToWinner(wonRound);
-			giveComPileToWinner(wonRound);
-			
-//Mick, to put in writing of communal pile to test log here as cards may have been removed from it 
-//here. Again see the notes about writing in the big decks above. Both this and the call below 
-//could also be put within the methods that add and remove cards from the pile, which may be neater,
-//up to you what you think when you do it.
-
+			 if(!(communalPile.getSize()==0)) {
+				 giveComPileToWinner(wonRound);
+			 }
 //if the round was a draw put the players top cards in the communal pile
-		}else {
+		}else{
 			putCardsInCommunalPile();
-			
-//Mick, cards will have been added to the communal pile here so add another call to write the pile to the test 
-//here. Again see the notes about the full decks above.
-			
 		}
 //check if any players have dropped out 
 		checkForLosers();
-
-		
-//Mick, to put in writing the contents of each deck at the end of the round to the test log.
-//Please see all the other notes about writing the various decks to the log...
-
+		if(writeGameLogsToFile==true) {
+			testLog.endOfRoundDecksPrint(players, communalPile);
+		}
 //check if the game is over
 		isItOver();
 	}
@@ -395,6 +367,9 @@ public class Game {
 			players.get(i).getHand().removeTopCard();
 			communalPile.addNewCard(card);
 		}
+		if(writeGameLogsToFile==true) {
+			testLog.communalPileAddedToPrint(communalPile);
+		}
 	}
 
 //iterates through the communal pile adding the cards to the winning players deck
@@ -404,6 +379,9 @@ public class Game {
 		}
 //once cards have been added to the winning player empty the communal pile
 		communalPile.clearDeck();
+		if(writeGameLogsToFile==true) {
+			testLog.recordEmptyCommunalPile();
+		}
 	}
 
 	public void checkForLosers() {
