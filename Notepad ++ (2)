@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">  
+ <head>   
+  <!-- Required meta tags -->   
+  <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" 
+content="IE=edge">    
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+ 
+ <!-- The above 3 meta tags *must* come first in the head; any other headcontent must come *after* these tags-->
+ <title>Top Trump Game</title>    
+ <!-- Bootstrap CSS -->    
+ <link href="css/bootstrap.min.css" rel="stylesheet"><link href="styling.css"
+ rel="stylesheet">      
+ </head>
+ <body>
+
+ <div id="container"> 
+	<div id="header">                 
+		<div id="brand">                         
+			<h1>Top Trumps Game</h1>
+		</div>
+
+		<div class="clear">
+			</div> 
+		</div>    
+ 
+			<div id="container">
+				<!--create featured part-->
+		<div class="featured">
+		<!--create a row to use the grid system and limit space taken by featured content-->
+ 
+		<div class="row">
+		<!--Use only 9 columns out of 12 for medium and large devices-->
+			<div class="col-md-5">
+				<h3>New Game</h3>
+					<hr>
+	<p><a href="round1.html">Start a new Top Trumps Game</a></p>
+ 
+		</div>
+		<div class="col-md-5">
+			<h3>Game Statistics</h3>
+ 
+	<hr>
+		<p><a href="#">Get Statistics from past Games</a></p>
+ 
+										</div>
+									</div>
+								</div>
+							</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script </script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	</body>
+	</html>
