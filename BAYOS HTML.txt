@@ -1,0 +1,267 @@
+BAYOS HTML
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+-->
+	<title>Top Trump Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="styling.css" rel="stylesheet">
+    
+  </head>
+  <body>
+
+    <div id="container">             
+	    <div id="header">                 
+		<div id="brand">                     
+		    <h1>Top Trumps Game</h1>                 
+		</div>                 
+		               
+		<div class="clear"> 
+                </div>             
+	    </div>  
+  
+		<div id="container">
+		   <!--create featured part-->
+			<div class="featured">
+				<!--create a row to use the grid system and limit space taken by featured content-->
+				<div class="row">
+					<!--Use only 9 columns out of 12 for medium and large devices-->
+					<div class="col-md-5">
+						<h3>New Game</h3>
+							<hr>
+						<p><a href="round1.html">Start a new Top Trumps Game</a></p>
+					</div>
+
+				      <div class="col-md-5">
+						<h3>Game Statistics</h3>
+							<hr>
+						<p><a href="#">Get Statistics from past Games</a></p>
+					</div>	
+				</div>
+			</div>
+		</div>	
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+
+======================================================================================================================================================
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+-->
+	<title>Top Trump Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="styling.css" rel="stylesheet">
+    
+  </head>
+  <body>
+
+    <div id="container">             
+	    <div id="header">                 
+		<div id="brand">                     
+		    <h1>Top Trumps Game</h1> 		                
+		</div>                 
+		               
+		<div class="clear"> 
+                </div>             
+	    </div>  
+
+	<div id="container">             
+	    <div id="round1">   	
+		    <h2>Top Trumps Game</h2> 	              
+		               
+		<div class="clear"> 
+                </div>             
+	    </div>  
+  
+		<div id="container">
+		   <!--create active player part-->
+			<div class="activeplayers">				
+				<div class="row">
+					<!--Use only 9 columns out of 12 for medium and large devices-->
+					<div class="col-md-3">
+						<h3>New Game</h3>
+							<hr>
+						<p><a href="#">Start a new Top Trumps Game</a></p>
+					</div>
+
+				      <div class="col-md-3">
+						<h3>Game Statistics</h3>
+							<hr>
+						<p><a href="#">Get Statistics from past Games</a></p>
+					</div>	
+				</div>
+			</div>
+		</div>	
+	
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
+
+========================================================================================================================================================
+
+/*styling.css*/
+/*Add a cover background picture for the featured part
+with a fixed height*/
+.jumbotron{
+	background: url(http://freenaturestock.s3.amazonaws.com/166.jpg);
+	/*background: center center;*?
+ 	/*background-size: cover*/
+	background-size: 100% 100%;
+	height: 600px;
+}
+
+body{     
+	font: Arial, Helvetica, sans-serif;
+	background-color: #a7b2bc; 
+} 
+ 
+#container{     
+	width: 1050px; 
+	/*    border: 1px solid grey;*/     
+	margin: 0 auto; 
+} 
+ 
+#header{     
+	height: 80px;     
+	padding: 5px 0; 
+	background-color: #808080; 
+	margin-bottom: 10px; 
+	
+} 
+} 
+ 
+#brand{     
+	float: left;    
+} 
+
+h1{     
+	font-size: 35px;      
+	font-weight: 100;     
+	color: #fff;     
+	text-decoration: none; 
+	margin-left: 15px; 
+} 
+
+#round1{     
+	background-color: #808080;    
+} 
+
+h2{     
+	font-size: 25px;      
+	font-weight: 100;     
+	color: green;     
+	text-decoration: none; 
+	margin-left: 15px; 
+} 
+
+.clear{     
+	clear: both;    
+} 
+
+/*set text color of featured content*/
+.featured{
+	color: #000;
+	background-color: #fff;
+}
+
+.col-md-5{
+	margin-right: 2px;
+}
+
+hr{
+	color: #000;
+}
+
+/*create space between the title and the logo*/
+.featured h3{
+	background-color: rgba(145, 82, 58, 0.5);
+}
+
+/*style links*/
+.featured a{
+	font-weight: bold;
+	color: #000;
+	
+	/* border-radius: 10px; */
+	margin-top: 20px;
+	width: 160px;
+	margin-right: 15px;
+}
+
+.featured a:hover{
+	background-color: rgb(145, 82, 58);
+}
+
+.activeplayers .row:first-child{
+	background-color: yellow;	
+}
+
+.activeplayers:last-child{
+	background-color: orange;	
+}
+
+
+/*Add styling for devices between 480px and 768px*/
+@media (min-width: 480px) and (max-width: 768px){
+	
+
+	
+.featured h1{
+	padding-top: 30px;
+}
+	
+.featured p{
+	font-size: 17px;
+}
+	
+.featured{
+	text-align: center;
+}
+}
+
+/*Add styling for devices under 480px*/
+@media (max-width: 480px){
+	
+	
+.featured h1{
+	padding-top: 10px;
+}
+	
+.featured p, .featured a{
+	font-size: 13px;
+}
+	
+.featured{
+	text-align: center;
+}
+	
+
+}
+
+==================================================================================================================================================
+
