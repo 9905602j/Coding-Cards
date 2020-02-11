@@ -170,21 +170,6 @@ public class Game {
 		if(writeGameLogsToFile==true) {
 			testLog.recordWinner(players.get(0));
 		}
-// Maz you should be able to add writing everything that needs to be saved at the end of the 
-//game to the DB in here. There should be attributes for everything that you need to pass to the 
-//DB in this class. Write a method in your DBHandler class to take them and write them to the DB 
-//and the call it from here. Below is a suggestion/example for you.
-		
-		//DBHandler d = new DBHandler();
-		//d.writeToDB(numberOfDraws, players(0).getID(), roundNum);
-		
-//The above would write pass the number of draws, who won, and the number of rounds.
-		
-		//for(int i=0;i<startingPlayers.length;i++){
-			//d.writeRoundsWonToDB(startingPlayers[i].getID(), startingPlayers[i].getRoundsWon());
-		//}
-
-//This second bit would pass each players ID and how many rounds they won to the DB handler class.
 	}
 	
 //Used by the online version to start each round, builds up the gameState String with the correct 
@@ -252,6 +237,7 @@ public class Game {
 //check if the game is over
 		isItOver();
 	}
+
 
 //builds up the gameState String to display the right details at the start of each round 
 	public String displayRoundStart() {
@@ -408,7 +394,17 @@ public class Game {
 	public void isItOver() {
 		if(players.size()<2) {
 			gameOver = true;
+			writeToDB();
 		}
+	}
+	
+	public void writeToDB() {
+		DBHandler insert = new DBHandler();
+		boolean humanWon = false;
+		if(players.get(0) instanceof HumanPlayer) {
+			humanWon = true;
+		}
+		insert.addGameToDB(numberOfDraws, roundNum, humanWon);
 	}
 
 //returns the gameState string to the API for display on the web based version

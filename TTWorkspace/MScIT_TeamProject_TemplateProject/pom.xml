@@ -37,6 +37,14 @@
     	<version>${dropwizard.version}</version>
 	</dependency>
 	
+	<!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
+<dependency>
+    <groupId>postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>9.1-901-1.jdbc4</version>
+</dependency>
+	
+	
 	<!-- One of the requirements is to save results in a (mysql) database, so lets import the
 	     database connection driver libruary for that as well -->
 	<dependency>
