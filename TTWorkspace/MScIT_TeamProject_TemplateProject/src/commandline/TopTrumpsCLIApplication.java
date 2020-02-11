@@ -2,6 +2,7 @@ package commandline;
 
 import java.util.Scanner;
 
+import game.DBHandler;
 import game.Game;
 
 /**
@@ -49,10 +50,9 @@ public class TopTrumpsCLIApplication {
 		System.out.println(gameOrStats);//print for testing
 //display stats		
 		if(gameOrStats==1) {
-			System.out.println("Program will now display stats");//print for testing
-			
-//Maz to add call to data base here. You'll need to write a method in your DBHandler class that will call
-//the DB and then display the info to the console. 
+//			System.out.println("Program will now display stats");//print for testing
+			DBHandler stats = new DBHandler();
+			System.out.println(stats.displayGameStats());
 			return false;
 //start game
 		}else if(gameOrStats==2) {
