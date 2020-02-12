@@ -20,7 +20,7 @@ public class DBHandler {
 //			int numOfRounds = 78;
 //			boolean humanWon = false;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","charlieherma");
+				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
 				PreparedStatement insert = connection.prepareStatement("Insert into persistantgamedata(totalrounds, totaldraws, winner) values (?,?,?)");
 					insert.setInt(1,  numOfRounds);
 					insert.setInt(2, numOfDraws);
@@ -48,7 +48,7 @@ public class DBHandler {
 		public int gamesPlayed() {
 			int allGames = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","charlieherma");
+				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
 				PreparedStatement getGamesPlayed = connection.prepareStatement("SELECT COUNT(totalRounds) from persistantgamedata");
 				ResultSet gamesPlayed = getGamesPlayed.executeQuery();
 				if(gamesPlayed.next()) {
@@ -64,7 +64,7 @@ public class DBHandler {
 		public int humanWins() {
 			int humanWins= 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","charlieherma");
+				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
 				PreparedStatement getHumanWins = connection.prepareStatement("SELECT COUNT (winner) from persistantgamedata WHERE winner IS true");
 				ResultSet numOfHumanWins = getHumanWins.executeQuery();
 				if(numOfHumanWins.next()) {
@@ -80,7 +80,7 @@ public class DBHandler {
 		public int AIWins() {
 			int AIWins = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","charlieherma");
+				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
 				PreparedStatement getAIWins = connection.prepareStatement("SELECT COUNT (winner) from persistantgamedata WHERE winner IS false");
 				ResultSet numOfAIWins = getAIWins.executeQuery();
 				if(numOfAIWins.next()) {
@@ -98,7 +98,7 @@ public class DBHandler {
 			int totalDraws = 0;
 			int totalGames = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","charlieherma");
+				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
 				PreparedStatement getDraws = connection.prepareStatement("SELECT SUM(totaldraws) FROM persistantgamedata");
 				ResultSet allDraws = getDraws.executeQuery();
 				if(allDraws.next()) {
@@ -117,7 +117,7 @@ public class DBHandler {
 		public int longestGame() {
 			int longestGame = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","charlieherma");
+				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
 				PreparedStatement getLongestGame = connection.prepareStatement("SELECT MAX(totalRounds) FROM persistantgamedata");
 				ResultSet mostRounds = getLongestGame.executeQuery();
 				if(mostRounds.next()) {
