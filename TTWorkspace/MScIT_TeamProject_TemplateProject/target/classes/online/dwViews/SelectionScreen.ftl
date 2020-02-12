@@ -122,6 +122,16 @@
 			}
 
 		</script>
+		<h1>Top Trumps</h1>
+		<div id="chooseOption">
+		The game state will appear here once it loads.
+		</div>
+		<button onclick="chooseOption(1);">Start Game</button>
+		<button onclick="chooseOption(2);">Game Statistics</button>
 		
+	
 		</body>
+		
+		
+		
 </html>

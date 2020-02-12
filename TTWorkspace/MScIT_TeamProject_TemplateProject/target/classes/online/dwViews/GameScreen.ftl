@@ -37,6 +37,13 @@
 				// You can call other methods you want to run when the page first loads here
 				// --------------------------------------------------------------------------
 				
+				// A REALLY USEFUL THING TO DO HERE WOULD BE TO DISPLAY THE CURRENT
+				// STATE OF THE GAME
+				
+				getAndDisplayDeck();
+				getAndDisplayGameState();
+				
+				
 				// For example, lets call our sample methods
 				helloJSONList();
 				helloWord("Student");
@@ -76,6 +83,46 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
+		
+		// Get and display the current game state
+		function getAndDisplayGameState() {
+			var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game");
+			xhr.onload = function(e) {
+				var responseText = xhr.response;
+				displayGameDeck(responseText);
+				};
+				
+			xhr.send();			
+		}
+		function displayGameDeck(response) {
+			$('#stats').text(response);
+		}
+		
+			// Get and display the current game state
+			function getAndDisplayGameStats() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/stats");
+				xhr.onload = function(e) {
+					var responseText = xhr.response;
+					displayGameStats(responseText);
+					};
+					
+				xhr.send();			
+			}
+		
+			function displayGameStats(response) {
+				$('#chooseCategory').text(response);
+			}
+			
+			// Send a choice of category to the server
+			function chooseCategory(category) {
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game="+category);
+				xhr.onload = function(e) {
+					alert(xhr.response);
+					getAndDisplayGameState();
+				};
+					
+				xhr.send();			
+			}
 		
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {
@@ -123,5 +170,16 @@
 
 		</script>
 		
+		<h1>Top Trumps</h1>
+		<div id="chooseCategory">
+		This is for user selection.
+		</div>
+		<button onclick="chooseCategory(1);">1</button>
+		<button onclick="chooseCategory(2);">2</button>
+		<button onclick="chooseCategory(3);">3</button>
+		<button onclick="chooseCategory(4);">4</button>
+		<button onclick="chooseCategory(5);">5</button>
+		
 		</body>
+		
 </html>
