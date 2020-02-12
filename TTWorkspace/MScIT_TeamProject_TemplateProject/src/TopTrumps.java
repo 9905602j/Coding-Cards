@@ -3,7 +3,6 @@ import commandline.TopTrumpsCLIApplication;
 import online.TopTrumpsOnlineApplication;
 
 
-
 public class TopTrumps {
 
 	/** This is the main class for the TopTrumps Applications */
@@ -21,7 +20,10 @@ public class TopTrumps {
 		// check the command line for what switches are active
 		for (String arg : args) {
 			
-			if (arg.equalsIgnoreCase("-t")) printTestLog=true;
+			if (arg.equalsIgnoreCase("-t")) {
+				printTestLog=true ;
+				commandLineMode=true;
+			}
 			if (arg.equalsIgnoreCase("-c")) commandLineMode=true;
 			if (arg.equalsIgnoreCase("-o")) onlineMode=true;
 			

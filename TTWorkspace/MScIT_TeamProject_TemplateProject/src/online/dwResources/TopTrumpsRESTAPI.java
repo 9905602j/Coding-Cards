@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -15,6 +16,9 @@ import online.configuration.TopTrumpsJSONConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
+import game.Game;
+import game.HumanPlayer;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
 @Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
@@ -35,21 +39,45 @@ public class TopTrumpsRESTAPI {
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	
+	Game game;
+	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
 	 * a TopTrumpsJSONConfiguration from which you can get the location of
 	 * the deck file and the number of AI players.
 	 * @param conf
 	 */
-	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
+	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf, Game game) {
 		// ----------------------------------------------------
 		// Add relevant initalization here
 		// ----------------------------------------------------
+		this.game = game;
 	}
 	
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+	
+	@GET
+	@Path("/game_state")
+	public String gameState() throws IOException {
+// RUN THE GAME UNTIL WE NEED SOME MORE INPUT HERE,
+// AND RETURN THE PROGRESS ON THE GAME AS A STRING
+//So right now it runs the start of the round and displays the appropriate info to the user
+//then the program waits for input, when it gets it it calls choose category below
+		game.startRoundOnline();
+		return oWriter.writeValueAsString(game.toString());
+	}
+	
+	@POST
+	@Path("/choose_category")
+	public String chooseCategory(@QueryParam("category") int category) throws IOException {
+//once input has been given by the user it is passed to the game and processed
+		game.playRound(category - 1);
+//gets the gameState to update and then passes the new String back to the API for display
+		game.finishRoundOnline();
+		return oWriter.writeValueAsString(game.toString());
+	}
 	
 	@GET
 	@Path("/helloJSONList")
