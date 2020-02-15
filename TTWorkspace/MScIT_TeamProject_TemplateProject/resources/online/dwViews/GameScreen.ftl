@@ -45,8 +45,7 @@
 		<h2>     Top Trumps Game</h2>
 	</div>
 
-	<div id="instruction" style="background-color:rgb(28, 161, 227);height:50px;color: white" widthclass="content">
-		<h5>  Start a new game now!</h5>
+	<div id="instruction" style="background-color:rgb(28, 161, 227);height:50px;color: white" class="content">
 	</div>
 
 	<div id="body" class="img">
@@ -55,39 +54,28 @@
 				<div>
 					<p></p>
 					<div id="status" class = "status">
-						<h5> <br> The active player is AI Player 3 </h5>
+						<h5> <br> The active player is <span id="playerName">...</span> </h5>
 					</div>
 
-					<div id="status1" class = "status" style = "display: none">
-						<h5> <br> The active player is You </h5>
-					</div>
-					<div id="roundResult" class = "roundResult" style ="display:none">
-						<h7> <br> They selected 'Firepower' <p> You won. Selecet a Category </h7>
+					<div id="roundResult" class = "roundResult">
+						<h7 id="gameState"> </h7>
 					</div>
 
-					<div  class="categories">
-						<button id = "categories" onclick="myFunction()" class="dropbtn" style ="display:none">Select a Category</button>
+					<div id="categoryDropDown" class="categories">
+						<button id = "categories" onclick="myFunction()" class="dropbtn">Select a Category</button>
 						<div id="myDropdown" class="dropdown-content">
-							<a onclick="chooseCategory(1);">Size</a>
-							<a onclick="chooseCategory(2);">Speed</a>
-							<a onclick="chooseCategory(3);">Range</a>
-							<a onclick="chooseCategory(4);">Firepower</a>
-							<a onclick="chooseCategory(5);">Cargo</a>
-
+							<a onclick="chooseCategory(1);" id="categoryButton1"></a>
+							<a onclick="chooseCategory(2);" id="categoryButton2"></a>
+							<a onclick="chooseCategory(3);" id="categoryButton3"></a>
+							<a onclick="chooseCategory(4);" id="categoryButton4"></a>
+							<a onclick="chooseCategory(5);" id="categoryButton5"></a>
 						</div>
-						<p></p>
-						<button id = showResultBtn onclick="doDisplay();doDisplay_roundResult();doDisplay_btn();doDisplay_showResultBtn();status();status1()" class = "showResult"> Show Result </button>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<br>
-						<button onclick="goToMain()" class = "goToMain"> Go Back to the Main </button>
-
 					</div>
+					<div id="nextTurn" class="categories" >
+						<button onclick="chooseCategory(1);" class="dropbtn">Next Turn</button>
+					</div>	
+					<button onclick="goToMain()" class = "goToMain"> Go Back to the Main </button>
+
 				</div>
 	
 
@@ -102,7 +90,7 @@
 						<h4 id="humanPlayer">You</h4>
 					</div>
 					<div id="card_left" class = "cardleft">
-						<h5 id="card_left_title"> 9 cards left </h5>
+						<h5 id="card_left_title"> <span id="cardsLeft"> Loading... </span></h5>
 					</div>
 					<div id="card_name" class = "cardName">
 						<h4 id="card_left_title"> 350r </h4>
@@ -113,11 +101,11 @@
 					<div id="categories" class = "body_card">
 						<h6 id="card_left_title" >
 							<ul id="card_left_body">
-								<li>Size: 7</li>
-								<li>Speed: 3</li>
-								<li>Range: 2</li>
-								<li>Firepower: 10</li>
-								<li>Cargo: 1</li>
+								<li><span id="categoryName1"></span>: <span id="categoryValue1"></span></li>
+								<li><span id="categoryName2"></span>: <span id="categoryValue2"></span></li>
+								<li><span id="categoryName3"></span>: <span id="categoryValue3"></span></li>
+								<li><span id="categoryName4"></span>: <span id="categoryValue4"></span></li>
+								<li><span id="categoryName5"></span>: <span id="categoryValue5"></span></li>
 							</ul>
 						</h6>
 					</div>
@@ -247,69 +235,20 @@
 			</div>
 		</div>
 	</div>
-</body>
-
 
 		
 		<script type="text/javascript">
 		
 			// Method that is called on page load
 			function initalize() {
-			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// A REALLY USEFUL THING TO DO HERE WOULD BE TO DISPLAY THE CURRENT
-				// STATE OF THE GAME
+				// display the current game state
 				getAndDisplayGameState();
 				
-				
-				// For example, lets call our sample methods
-//				helloJSONList();
-//				helloWord("Student");
-				
 			}
-			
 			
 			function goToMain(){
 		    	window.location.href="http://localhost:7777/toptrumps"
-		    	}
-
-			var display = true;
-			function status(){
-				var status = document.getElementById("status");
-					status.style.display = 'none';
-			}
-			function status1(){
-				var status1 = document.getElementById("status1");
-				status1.style.display = 'block';
-			}
-
-			function doDisplay(){
-				var showResult = document.getElementById("showresult");
-				showResult.style.display = 'block';
-			}
-
-			function doDisplay_btn(){
-				var showButton = document.getElementById("categories");
-				showButton.style.display = 'block';
-			}
-
-			function doDisplay_roundResult(){
-				var roundResult = document.getElementById("roundResult");
-				roundResult.style.display = 'block';
-			}
-
-			function doDisplay_showResultBtn(){
-				var showResultBtn = document.getElementById("showResultBtn");
-				if(showResultBtn.style.display == 'block') {
-					showResultBtn.style.display = 'none';
-				}else {
-					showResultBtn.style.display = 'none';
-				}
-			}
-
+		    }
 
 			function myFunction() {
 		    document.getElementById("myDropdown").classList.toggle("show");
@@ -328,10 +267,6 @@
 		    }
 		  }
 		}
-			// -----------------------------------------
-			// Add your other Javascript methods Here
-			// -----------------------------------------
-		
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();
@@ -367,7 +302,7 @@
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game_state");
 				xhr.onload = function(e) {
 					var responseText = xhr.response;
-					displayGameState(responseText);
+					displayGameState($.parseJSON(responseText));
 					};
 					
 				xhr.send();			
@@ -376,68 +311,90 @@
 			
 		
 			function displayGameState(response) {
-				$('#gameStateDiv').text(response);
+				// Unpack the array from the API
+				// [0] - Current active player
+				// [1] - Current game state (i.e. what just happened)
+				// [2] - Number of cards left for the human player
+				// [3] - Your current card name
+				// [4] - Card category value for category 1
+				// [5] - Card category value for category 2
+				// [6] - Card category value for category 3
+				// [7] - Card category value for category 4
+				// [8] - Card category value for category 5
+				// [9] - Card category name for category 1
+				// [10] - Card category name for category 2
+				// [11] - Card category name for category 3
+				// [12] - Card category name for category 4
+				// [13] - Card category name for category 5
+				// [14] - "1" for player's turn, "0" for AI turn
+				
+				var activePlayer = response[0];
+				var gameState = response[1];
+				var cardsLeft = response[2];
+				var cardname = response[3];
+				var cardCategoryValue1 = response[4];
+				var cardCategoryValue2 = response[5];
+				var cardCategoryValue3 = response[6];
+				var cardCategoryValue4 = response[7];
+				var cardCategoryValue5 = response[8];
+				var cardCategoryName1 = response[9];
+				var cardCategoryName2 = response[10];
+				var cardCategoryName3 = response[11];
+				var cardCategoryName4 = response[12];
+				var cardCategoryName5 = response[13];
+				var isHumanTurn = response[14];
+
+				$('#playerName').text(activePlayer);
+				if (cardsLeft == "0") {
+					$('#cardsLeft').text("No cards left");
+				} else {
+					$('#cardsLeft').text(cardsLeft + " cards left");
+				}
+				
+				$('#gameState').text(gameState);
+				
+				$('#categoryValue1').text(cardCategoryValue1);
+				$('#categoryValue2').text(cardCategoryValue2);
+				$('#categoryValue3').text(cardCategoryValue3);
+				$('#categoryValue4').text(cardCategoryValue4);
+				$('#categoryValue5').text(cardCategoryValue5);
+				
+				$('#categoryName1').text(cardCategoryName1);
+				$('#categoryName2').text(cardCategoryName2);
+				$('#categoryName3').text(cardCategoryName3);
+				$('#categoryName4').text(cardCategoryName4);
+				$('#categoryName5').text(cardCategoryName5);
+				
+				$('#categoryButton1').text(cardCategoryName1);
+				$('#categoryButton2').text(cardCategoryName2);
+				$('#categoryButton3').text(cardCategoryName3);
+				$('#categoryButton4').text(cardCategoryName4);
+				$('#categoryButton5').text(cardCategoryName5);
+				
+				if (isHumanTurn=="2") {
+					$('#categoryDropDown').hide();
+					$('#nextTurn').hide();
+				} else {
+					if (isHumanTurn=="1") {
+						$('#categoryDropDown').show();
+						$('#nextTurn').hide();
+					} else {
+						$('#categoryDropDown').hide();
+						$('#nextTurn').show();
+					}
+				}	
+				
 			}
 			
 			// Send a choice of category to the server
 			function chooseCategory(category) {
 				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/choose_category?category="+category);
 				xhr.onload = function(e) {
-					alert(xhr.response);
-	
 					getAndDisplayGameState();
 				};
 					
 				xhr.send();			
 
-			}
-			
-			
-			
-
-		
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloJSONList() {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloJSONList"); // Request type and URL
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
-			}
-			
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloWord(word) {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); // Request type and URL+parameters
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
 			}
 
 		</script>

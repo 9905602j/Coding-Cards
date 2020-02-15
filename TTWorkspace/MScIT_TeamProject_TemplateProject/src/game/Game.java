@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+// this is the model class for the whole game
 public class Game {
 //attributes the specification told us would always be the same	
 	private final int numberOfCategories = 5;
 	private final int sizeOfDeck = 40;
+	// number of players set to 4, ideal implementation of online version would require this to be 
+	//settable by the player, this function has not been implemented at this time.
 	private final int numberOfPlayers = 4;
 //human player will always be player one and in position 0
 	final int humanPlayer = 0;
@@ -38,12 +41,7 @@ public class Game {
 //counter used to keep track of the number of drawn rounds in a game
 	private int numberOfDraws = 0;
 	private boolean gameOver = false;
-//	private GameDisplay currentGame = new GameDisplay();
 
-	
-
-	
-	
 	public Game(boolean writeLog, boolean online) {
 //set booleans to allow appropriate running for each mode, command line, online and writing test log
 		writeGameLogsToFile = writeLog;
@@ -71,6 +69,8 @@ public class Game {
 		roundNum = 0;
 		
 		}
+	
+	// Getters
 	
 	public int getActivePlayer() {
 		return activePlayer;
@@ -295,13 +295,18 @@ public class Game {
 	}
 
 //if there is only one player left the game is over
-	public void isItOver() {
+	public boolean isItOver() {
+		// Don't write to the DB twice.
+		if (gameOver) return gameOver;
+		
 		if(players.size()<2) {
 			gameOver = true;
 			writeToDB();
 		}
+		return gameOver;
 	}
 	
+	// Write the record of this game to the database
 	public void writeToDB() {
 		DBHandler insert = new DBHandler();
 		boolean humanWon = false;
@@ -311,14 +316,30 @@ public class Game {
 		insert.addGameToDB(numberOfDraws, roundNum, humanWon);
 	}
 
-//returns the gameState string to the API for display on the web based version
-//	public String toString() {
-//		GameDisplay currentGame = new GameDisplay();
-//		return currentGame.getGameState();
-//	}
-	
-	
-	
-	
+	// return the human player object, or null if the human
+	// is already out of the game.
+	public Player getHumanPlayer() {
+		Player maybeHuman = players.get(0);
+		if (maybeHuman instanceof HumanPlayer) {
+			return maybeHuman;
+		} else {
+			return null;
+		}
+	}
 
+	// Get the top card for a player
+	public Card getPlayerTopCard(Player player) {
+		return player.getTopCard();
+	}
+
+	// if there's still a human player in the game, return their top card
+	// return null if there's no human player left
+	public Card getHumanTopCard() {
+		Player humanPlayer = getHumanPlayer();
+		if (humanPlayer != null) {
+			return getPlayerTopCard(humanPlayer);
+		} else {
+			return null;
+		}
+	}
 }

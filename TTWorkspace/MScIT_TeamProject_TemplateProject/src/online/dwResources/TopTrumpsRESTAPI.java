@@ -17,8 +17,10 @@ import online.configuration.TopTrumpsJSONConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import game.Card;
 import game.Game;
 import game.GameController;
+import game.GameView;
 import game.HumanPlayer;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
@@ -50,16 +52,9 @@ public class TopTrumpsRESTAPI {
 	 * @param conf
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf, Game game) {
-		// ----------------------------------------------------
-		// Add relevant initalization here
-		// ----------------------------------------------------
 		this.game = game;
 		controller = new GameController(game);
 	}
-	
-	// ----------------------------------------------------
-	// Add relevant API methods here
-	// ----------------------------------------------------
 	
 	@GET
 	@Path("/game_state")
@@ -69,8 +64,78 @@ public class TopTrumpsRESTAPI {
 //So right now it runs the start of the round and displays the appropriate info to the user
 //then the program waits for input, when it gets it it calls choose category below
 		controller.startRoundOnline();
-		return oWriter.writeValueAsString(controller.toString());
+		ArrayList<String> jsData = new ArrayList<String>();
+		// We produce a list containing all the data the javascript needs
+		// This contains, always in this order:
+		// [0] - Current active player
+		// [1] - Current game state (i.e. what just happened)
+		// [2] - Number of cards left if the human is still in the game, "0" if not
+		// [3] - Your current card name
+		// [4] - Card category value for category 1
+		// [5] - Card category value for category 2
+		// [6] - Card category value for category 3
+		// [7] - Card category value for category 4
+		// [8] - Card category value for category 5
+		// [9] - Card category name for category 1
+		// [10] - Card category name for category 2
+		// [11] - Card category name for category 3
+		// [12] - Card category name for category 4
+		// [13] - Card category name for category 5
+		// [14] - "2" for game over, "1" for the human player's turn next, "0" for an AI player next.
+		GameView view = controller.getView();
+		
+		jsData.add(view.getActivePlayerString());
+		jsData.add(view.toString());
+		Card ourCard = game.getHumanTopCard();
+		if (ourCard != null) {
+			jsData.add(Integer.toString(view.getHumanCardsLeft())); // 2 - They're still in the game
+			jsData.add(ourCard.getName()); // 3
+			jsData.add(Integer.toString(ourCard.getAttributeValue(0))); // 4
+			jsData.add(Integer.toString(ourCard.getAttributeValue(1))); // 5
+			jsData.add(Integer.toString(ourCard.getAttributeValue(2))); // 6
+			jsData.add(Integer.toString(ourCard.getAttributeValue(3))); // 7
+			jsData.add(Integer.toString(ourCard.getAttributeValue(4))); // 8
+		} else {
+			// Card name
+			jsData.add("0"); // 2
+			jsData.add("You're out!"); // 3
+			jsData.add(""); // 4
+			jsData.add(""); // 5
+			jsData.add(""); // 6
+			jsData.add(""); // 7
+			jsData.add(""); // 8
+		}
+		
+		// Add in the category names
+		String[] categories = game.getCategories();
+		jsData.add(categories[0]); // 9
+		jsData.add(categories[1]); // 10
+		jsData.add(categories[2]); // 11
+		jsData.add(categories[3]); // 12
+		jsData.add(categories[4]); // 13
+		
+		// Is it the human player's turn?
+		if (game.isItOver()) {
+			jsData.add("2");
+		} else {
+			if (game.getPlayers().get(game.getActivePlayer()) instanceof HumanPlayer) {
+				jsData.add("1");
+			} else {
+				jsData.add("0");
+			}
+		}
+		return oWriter.writeValueAsString(jsData);
 	}
+	
+
+	@POST
+	@Path("/new_game")
+	public String new_game() throws IOException {
+		game = new Game(false, true);
+		controller = new GameController(game);
+		return oWriter.writeValueAsString("OK");
+	}
+	
 	
 	@POST
 	@Path("/choose_category")
@@ -79,8 +144,19 @@ public class TopTrumpsRESTAPI {
 		game.playRound(category - 1);
 //gets the gameState to update and then passes the new String back to the API for display
 		controller.finishRoundOnline();
-		return oWriter.writeValueAsString(controller.toString());
+		return oWriter.writeValueAsString("OK");
 	}
+	
+	@GET
+	@Path("/stats")
+	public String getStats() throws IOException {
+// RUN THE GAME UNTIL WE NEED SOME MORE INPUT HERE,
+// AND RETURN THE PROGRESS ON THE GAME AS A STRING
+//So right now it runs the start of the round and displays the appropriate info to the user
+//then the program waits for input, when it gets it it calls choose category below
+		return oWriter.writeValueAsString(controller.getStats());
+	}
+	
 	
 	@GET
 	@Path("/helloJSONList")

@@ -5,22 +5,26 @@ import java.util.Scanner;
 public class GameController {
 	
 	private Game game;
-	private GameDisplay currentGame;;
+	private GameView gameView;
 	private boolean writeGameLogsToFile;
 
 //controller constructor for CL version
 	public GameController(boolean writeLog) {
 		writeGameLogsToFile = writeLog;
-		currentGame = new GameDisplay();
 	}
 //controller constructor for online version
 	public GameController(Game g) {
 		writeGameLogsToFile = false;
 		this.game = g;
-		currentGame = new GameDisplay();
+		gameView = new GameView(g);
 	}
 	
-	//find out if the player would like to play, view stats or quit
+	// allow the UI to access the game view
+	public GameView getView() {
+		return gameView;
+	}
+	
+	// CLI version: find out if the player would like to play, view stats or quit
 	public boolean gameOrStats(boolean writeLog) {
 	//get the players choice
 		Scanner scanner = new Scanner(System.in);
@@ -36,6 +40,7 @@ public class GameController {
 //start game
 		}else if(gameOrStats==2) {
 			game = new Game(writeLog, false);
+			gameView = new GameView(game);
 			playCL();
 			return false;
 		}
@@ -57,7 +62,8 @@ public class GameController {
 		while(game.getGameOver()==false) {
 			game.incrementRoundNum();
 //displays the information needed by the user at the start of each round
-			System.out.println(currentGame.displayRoundStart(game));
+			System.out.println(gameView.displayRoundStart());
+			System.out.println(gameView.displayCurrentCard());
 //gets the category choice from the active player
 //If active player is human it will call a method in HumanPlayer to allow the user to pick
 //If the active player is AI it will call a method in AIPlayer to pick at random (the AI should be really bad at this game)
@@ -67,9 +73,9 @@ public class GameController {
 			game.playRound(categoryPicked);
 //once playRound() has moved all cards as required the results of the round are displayed to the user
 //both displayRoundResult() and displayWinningCard() fill the String gameState with the required info
-			currentGame.displayRoundResult(game, game.getWonRound(), categoryPicked);
-			currentGame.displayWinningCard(game, game.getWinner(), categoryPicked);
-			System.out.println(currentGame.toString());
+			System.out.println(gameView.displayRoundResult(game.getWonRound(), categoryPicked));
+			gameView.displayWinningCard(game.getWinner(), categoryPicked);
+			System.out.println(gameView.toString());
 
 //print code below used for testing during dev, I'm leaving it here for use during future dev
 				
@@ -82,7 +88,7 @@ public class GameController {
 		}
 //If the game exits the loop it is over.
 //displays the results of the game to the user.
-		System.out.println(currentGame.displayGameEnd(game));
+		System.out.println(gameView.displayGameEnd());
 		if(writeGameLogsToFile==true) {
 			game.getTestLogHandler().recordWinner(game.getPlayers().get(0));
 		}
@@ -93,24 +99,25 @@ public class GameController {
 	public void startRoundOnline() {
 //first check if the game is over and display end of game info if so
 		if(game.getGameOver()==true) {
-			currentGame.displayGameEnd(game);
+			gameView.displayGameEnd();
 		}else {
 //if not display the start of round info and wait for response from user
 			game.incrementRoundNum();
-			currentGame.displayRoundStart(game); 
-			currentGame.UpDateRoundStartDisplayForOnline(game);
+			gameView.displayRoundStart(); 
 
 		}
 	}
 
 //used by the online version to display the results of each round
 	public void finishRoundOnline() {
-		currentGame.displayRoundResult(game, game.getWonRound(), game.getCatPicked());
-		currentGame.displayWinningCard(game, game.getWinner(), game.getCatPicked());
+		gameView.displayRoundResult(game.getWonRound(), game.getCatPicked());
+		gameView.displayWinningCard(game.getWinner(), game.getCatPicked());
 	}
 	
-	public String toString() {
-		return currentGame.toString();
+	// Return the game stats as a string for display
+	public String getStats() {
+		DBHandler stats = new DBHandler();
+		return stats.displayGameStats();
 	}
-
+	
 }

@@ -1,48 +1,72 @@
 package game;
 
-public class GameDisplay {
+public class GameView {
 
+	private Game game;
+	
+	public GameView(Game game) {
+		this.game = game;
+	}
+	
 	//String used to display the state of the game at any given point	
 	private String gameState = "Game Start";
 	
-	public void UpDateRoundStartDisplayForOnline(Game game) {
-		if(game.players.get(game.getActivePlayer())instanceof HumanPlayer) {
-			gameState = gameState + "It is your turn, please pick a category.";
-//
-//Maybe put the categories are... part in here for online version. Would like to get them displayed on the buttons though
-//
-		}else {
-			gameState = gameState + "It is Player " + game.players.get(game.getActivePlayer()).getID() + "'s turn, press any button to continue.";
+	// Return either "You" or "AI Player X" for the current player.
+	// Used by the web interface
+	public String getActivePlayerString() {
+		int playerNumber = game.getActivePlayer();
+		Player player = game.getPlayers().get(playerNumber);
+		if (player instanceof HumanPlayer) {
+			return "You";
+		} else {
+			return "AI Player "+player.getID();
+		}
+	}
+	
+	// Return how many cards left the human player has,
+	// if they're still in the game, else zero.
+	public int getHumanCardsLeft() {
+		Player human = game.getHumanPlayer();
+		if (human != null) {
+			return human.getHand().getSize();
+		} else {
+			return 0;
 		}
 	}
 
-	public String displayRoundStart(Game game) {
-		gameState = "Round " + game.roundNum + "\n" + "Round " + game.roundNum + ": Players have drawn their cards\n";
-	//if the human player is still in the game display the card they drew and how many cards they have in their hand
-		if(game.players.get(game.humanPlayer) instanceof HumanPlayer) {
-			gameState = gameState + "You drew '" + game.players.get(game.humanPlayer).getTopCard().getName() + "':\n";
-			for(int i=0;i<game.categories.length;i++) {
-				gameState = gameState + "\t> " + game.categories[i] + ": " + game.players.get(game.humanPlayer).getTopCard().getAttributeValue(i) +"\n";
-			}
-			gameState = gameState +"There are '" + game.players.get(game.humanPlayer).getHand().getSize() + " cards in your deck\n";
-		}
+	// Return the start-of-round message text
+	public String displayRoundStart() {
+		gameState = "Round " + game.roundNum + ": Players have drawn their cards\n";
 		return gameState;
 	}
+	
+	// Return a string showing the player's current card and the categories on it.
+	public String displayCurrentCard() {
+		String currentCard = "";
+		if(game.players.get(game.humanPlayer) instanceof HumanPlayer) {
+			currentCard = currentCard + "You drew '" + game.players.get(game.humanPlayer).getTopCard().getName() + "':\n";
+			for(int i=0;i<game.categories.length;i++) {
+				currentCard = currentCard + "\t> " + game.categories[i] + ": " + game.players.get(game.humanPlayer).getTopCard().getAttributeValue(i) +"\n";
+			}
+			currentCard = currentCard +"There are '" + game.players.get(game.humanPlayer).getHand().getSize() + " cards in your deck\n";
+		}
+		return currentCard;
+	}
 
-	public void displayRoundResult(Game game, Player wonRound, int catPicked) {
+	public String displayRoundResult(Player wonRound, int catPicked) {
 	//if the round was a draw tell the user and give size of communal pile
 	//if the user won tell them
 	//if an AI won tell the user which one
 		if(game.isDraw==true){
-			gameState = "Round " + game.roundNum + ": This round is a draw, common pile now has " + game.communalPile.getSize() + " cards\n" ;
+			return "Round " + game.roundNum + ": This round is a draw, common pile now has " + game.communalPile.getSize() + " cards\n" ;
 		}else if(wonRound instanceof HumanPlayer) {
-			gameState = "Round " + game.roundNum +": Player you won this round\n";
+			return "Round " + game.roundNum +": Player you won this round\n";
 		}else {
-			gameState = "Round " + game.roundNum + ": Player " + wonRound.getID() + " won this round\n";
+			return "Round " + game.roundNum + ": Player " + wonRound.getID() + " won this round\n";
 		}	
 	}
 
-	public String displayWinningCard(Game game, Card winner, int categoryPicked) {
+	public String displayWinningCard(Card winner, int categoryPicked) {
 		gameState = gameState + "The winning card was: '" + winner.getName() + "'\n";
 	//iterate through the attributes of the winning card
 		for(int i=0;i<game.categories.length;i++) {
@@ -56,7 +80,7 @@ public class GameDisplay {
 		return gameState;
 	}
 
-	public String displayGameEnd(Game game) {
+	public String displayGameEnd() {
 		gameState = "\n\nGame End\n\n";
 	//display who the winner of the game was
 		if(game.players.get(0) instanceof AIPlayer) {

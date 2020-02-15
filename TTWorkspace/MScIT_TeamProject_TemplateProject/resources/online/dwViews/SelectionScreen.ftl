@@ -44,7 +44,7 @@
 
 				<p></p>
 				<div id="status" class = "status">
-					<button onclick="newGame()" class = "selectButton"> New Game </button>
+					<a href="#" onclick="newGame()" class="btn btn-primary selectButton"> New Game </a>
 				</div>
 				<div id="description" class = "description">
 					<h7> <br> Start a new Top Trumps Game </h7>
@@ -56,7 +56,7 @@
 			<div style="; float: left; width: 45%;">
 				<p></p>
 				<div id="status" class = "status">
-					<button onclick="gameStats()" class = "selectButton"> Game Statistics </button>
+					<a href="/toptrumps/stats/" class="btn btn-primary selectButton"> Game Statistics </a>
 					<div id="description" class = "description">
 					<h7> <br> See the Game Statistics </h7>
 				</div>
@@ -113,36 +113,10 @@
 	</style>
 
 	</body>
-		
-		</div>
-		
+	
 		<script type="text/javascript">
-		
-			// Method that is called on page load
-			function initalize() {
-			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
-				
-			}
 
-			function newGame(){
-		    	window.location.href="http://localhost:7777/toptrumps/game"
-		    	}
-
-
-			function gameStats(){
-		    	window.location.href="http://localhost:7777/toptrumps/stats"
-		    	}
-
-			// -----------------------------------------
-			// Add your other Javascript methods Here
-			// -----------------------------------------
-		
-			// This is a reusable method for creating a CORS request. Do not edit this.
+						// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();
   				if ("withCredentials" in xhr) {
@@ -167,57 +141,17 @@
   				 return xhr;
 			}
 		
-		</script>
-		
-		<!-- Here are examples of how to call REST API Methods -->
-		<script type="text/javascript">
-		
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloJSONList() {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloJSONList"); // Request type and URL
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
+			// Tell the server to start a new game
+			function newGame() {
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/new_game");
 				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
+					window.location.href="/toptrumps/game/";
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
+					
+				xhr.send();			
 			}
 			
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloWord(word) {
-			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); // Request type and URL+parameters
-				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();		
-			}
-
 		</script>
-
-		
 		
 </html>

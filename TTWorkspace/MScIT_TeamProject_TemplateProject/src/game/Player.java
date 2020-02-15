@@ -2,13 +2,11 @@ package game;
 
 abstract class Player {
 	private int playerID;
-	private int sizeOfHand;
 	private Deck playersHand;
 //counter to keep track of number of rounds won by an individual player
 	private int roundsWon;
 	
 	public Player(int sizeOfHand, int ID) {
-		this.sizeOfHand = sizeOfHand;
 		this.playerID = ID;
 		playersHand = new Deck(sizeOfHand);
 		roundsWon = 0;

@@ -36,7 +36,8 @@ public class Card {
 		}
 		return card;
 	}
-	
+
+	// display all the details of a card
 	public String allDetailsPrint() {
 		String card = "\t" + name + "\n";
 		for(int i=0; i<attributeValues.length;i++) {

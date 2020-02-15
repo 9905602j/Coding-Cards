@@ -3,9 +3,6 @@ package game;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
-//	private int playerID;
-//	private int sizeOfHand;
-//	private Deck playersHand;
 	
 	public HumanPlayer(int sizeOfHand, int ID) {
 		super(sizeOfHand, ID);

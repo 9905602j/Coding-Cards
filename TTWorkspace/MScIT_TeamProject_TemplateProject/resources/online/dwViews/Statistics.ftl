@@ -47,18 +47,13 @@
 	<div style=" float: left; width: 70%;">
 <p></p>
 			<p></p>
-			<div id="description" class = "head_stats">
+			<div id="description" class="head_stats">
 				<h3> Game Statistics </h3>
 			</div>
-			<div id="description" class = "description_stats">
-				<h7> <ul><li> Number of Games: 3 </li>
-					<p><li> Number of Human Wins: 5 </li>
-					<p><li> Number of AI Wins: 2 </li>
-					<p><li> Average Draws per Game: 0 </li>
-					<p><li> Longest Game: 72 </li>
-				</ul>
-
-				 </h7>
+			<div  class="description_stats">
+			<pre id="statsDiv">
+			Loading...
+			</pre>
 			</div>
 			<div>
 			<br><br><br><br>
@@ -138,13 +133,28 @@
 		
 			// Method that is called on page load
 			function initalize() {
-			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
+				getAndDisplayStats();
 			}
+			
+			// Get and display the current game state
+			function getAndDisplayStats() {
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/stats");
+				xhr.onload = function(e) {
+					var responseText = $.parseJSON(xhr.response);
+					displayStats(responseText);
+					};
+					
+				xhr.send();			
+			}
+			
+			
+		
+			function displayStats(response) {
+				$('#statsDiv').text(response);
+			}
+			
+			
+			
 				function goToMain(){
 		    	window.location.href="http://localhost:7777/toptrumps/"
 		    	}
