@@ -85,7 +85,7 @@
 						<br>
 						<br>
 						<br>
-						<button onclick="goToMain" class = "goToMain"> Go Back to the Main </button>
+						<button onclick="goToMain()" class = "goToMain"> Go Back to the Main </button>
 
 					</div>
 				</div>
@@ -270,9 +270,10 @@
 //				helloWord("Student");
 				
 			}
-
+			
+			
 			function goToMain(){
-		    	window.location.href="http://localhost:7777/toptrumps/gameSelection"
+		    	window.location.href="http://localhost:7777/toptrumps"
 		    	}
 
 			var display = true;

@@ -24,7 +24,95 @@
     	
     	<div class="container">
 
-			<!-- Add your HTML Here -->
+
+			<!-- Add your HTML Here --><body>
+			<div id="title" style="height:50px" widthclass="content">
+			<h2>     Top Trumps Game</h2>
+		</div>
+
+
+	<div id="body" class="img">
+
+
+	<div style="float: left; width: 15%;">
+		<p></p>
+	</div>
+
+		<div style=" float: left; width: 70%;">
+	<p></p>
+			<div style=" float: left; width: 45%;">
+
+				<p></p>
+				<div id="status" class = "status">
+					<button onclick="newGame()" class = "selectButton"> New Game </button>
+				</div>
+				<div id="description" class = "description">
+					<h7> <br> Start a new Top Trumps Game </h7>
+				</div>
+			</div>
+			<div style=" float: left; width: 10%;">
+				<p></p>
+			</div>
+			<div style="; float: left; width: 45%;">
+				<p></p>
+				<div id="status" class = "status">
+					<button onclick="gameStats()" class = "selectButton"> Game Statistics </button>
+					<div id="description" class = "description">
+					<h7> <br> See the Game Statistics </h7>
+				</div>
+				</div>
+			</div>
+		</div>
+
+	<div style="float: left; width: 15%;">
+		<p></p>
+	</div>
+	</div>
+	
+	<style>
+
+	.selectButton {
+	width: 350px;
+	height: 30px;
+	border: 1px;
+	border-radius: 2px;
+	text-align: center;
+	vertical-align: center;
+	background-color: grey;
+	color:white;
+	}
+
+	.selectButton:hover {
+	background-color: #777;
+	}
+
+	.description {
+	width: 350px;
+	height: 100px;
+	border: 1px;
+	border-radius: 1px;
+	text-align: center;
+	vertical-align: center;
+	background-color: white;
+	color:black;
+	}
+
+
+	.img{
+	position: relative;
+	background-image: url(/assets/bg.jpg);                                                               
+	height: 100vh;
+	background-size: cover;
+	}
+
+	#title {
+	background-color: #2c2c2c;
+	color: white;
+	text-align: center;
+	}
+	</style>
+
+	</body>
 		
 		</div>
 		
@@ -38,11 +126,18 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
 				
 			}
-			
+
+			function newGame(){
+		    	window.location.href="http://localhost:7777/toptrumps/game"
+		    	}
+
+
+			function gameStats(){
+		    	window.location.href="http://localhost:7777/toptrumps/stats"
+		    	}
+
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
@@ -122,16 +217,7 @@
 			}
 
 		</script>
-		<h1>Top Trumps</h1>
-		<div id="chooseOption">
-		The game state will appear here once it loads.
-		</div>
-		<button onclick="chooseOption(1);">Start Game</button>
-		<button onclick="chooseOption(2);">Game Statistics</button>
-		
-	
-		</body>
-		
+
 		
 		
 </html>
