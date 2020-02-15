@@ -12,34 +12,33 @@ public class Game {
 	private final int sizeOfDeck = 40;
 	private final int numberOfPlayers = 4;
 //human player will always be player one and in position 0
-	private final int humanPlayer = 0;
+	final int humanPlayer = 0;
 //booleans of games current running state	
 	private boolean writeGameLogsToFile;
 	private boolean runningOnline;
 	private TestLogHandler testLog;
 	
 //ArrayList used to store all players currently in the game, players are removed once they loose
-	private ArrayList <Player> players = new ArrayList<Player>(numberOfPlayers);
+	ArrayList <Player> players = new ArrayList<Player>(numberOfPlayers);
 //Array used to store all players, used to retrieve player info at the end of the game
-	private Player[] startingPlayers = new Player[numberOfPlayers];
+	Player[] startingPlayers = new Player[numberOfPlayers];
 //used to keep track of who's turn it is
 	private int activePlayer;
 	
 	private int catPicked;
 	private Player wonRound;
 	private Card winner;
-	private String[] categories;
+	String[] categories;
 	private Deck fullDeck;
-	private Deck communalPile = new Deck(0);
+	Deck communalPile = new Deck(0);
 
 //counter used to keep track of number of rounds played and the number of the current round
-	private int roundNum;
-	private boolean isDraw = false;
+	int roundNum;
+	boolean isDraw = false;
 //counter used to keep track of the number of drawn rounds in a game
 	private int numberOfDraws = 0;
 	private boolean gameOver = false;
-//String used to display the state of the game at any given point	
-	private String gameState = "Game Start";
+//	private GameDisplay currentGame = new GameDisplay();
 
 	
 
@@ -72,6 +71,46 @@ public class Game {
 		roundNum = 0;
 		
 		}
+	
+	public int getActivePlayer() {
+		return activePlayer;
+	}
+	
+	public boolean getGameOver() {
+		return gameOver;
+	}
+	
+	public ArrayList <Player> getPlayers(){
+		return players;
+	}
+	
+	public int getNumberOfCategories() {
+		return numberOfCategories;
+	}
+	
+	public String [] getCategories() {
+		return categories;
+	}
+	
+	public Player getWonRound() {
+		return wonRound;
+	}
+	
+	public Card getWinner() {
+		return winner;
+	}
+	
+	public TestLogHandler getTestLogHandler() {
+		return testLog;
+	}
+	
+	public void incrementRoundNum() {
+		roundNum++;
+	}
+	
+	public int getCatPicked() {
+		return catPicked;
+	}
 
 //reads the deck in from the file provided
 	public void makeFullDeck() {
@@ -128,76 +167,6 @@ public class Game {
 		activePlayer = r.nextInt(players.size());
 	}
 
-//controls game loop for command line operation
-	public void playCL() {
-//print code below used for testing during dev, I'm leaving it here for use during future dev
-		
-//		for(int i=0; i<numberOfPlayers; i++) {
-//			players.get(i).playerPrint();
-//		}
-
-		System.out.println("Game Start");
-//Main game loop
-		while(gameOver==false) {
-			roundNum++;
-//displays the information needed by the user at the start of each round
-			System.out.println(displayRoundStart());
-//gets the category choice from the active player
-//If active player is human it will call a method in HumanPlayer to allow the user to pick
-//If the active player is AI it will call a method in AIPlayer to pick at random (the AI should be really bad at this game)
-			int categoryPicked = players.get(activePlayer).pickCategory(numberOfCategories, categories);
-//passes the category picked by the active player to playRound() which finds the winner of the round and
-//moves cards from hand to hand as required
-			playRound(categoryPicked);
-//once playRound() has moved all cards as required the results of the round are displayed to the user
-//both displayRoundResult() and displayWinningCard() fill the String gameState with the required info
-			displayRoundResult(wonRound, categoryPicked);
-			displayWinningCard(winner, categoryPicked);
-			System.out.println(gameState);
-
-//print code below used for testing during dev, I'm leaving it here for use during future dev
-			
-//			for(int j=0; j<players.size(); j++) {
-//				players.get(j).playerPrint();
-//			}
-//			System.out.println("\n The communal pile is \n");
-//			communalPile.testPrint();
-			
-		}
-//If the game exits the loop it is over.
-//displays the results of the game to the user.
-		System.out.println(displayGameEnd());
-		if(writeGameLogsToFile==true) {
-			testLog.recordWinner(players.get(0));
-		}
-	}
-	
-//Used by the online version to start each round, builds up the gameState String with the correct 
-//details for the start of the round allowing it to be passed to the API and displayed on the web page
-	public void startRoundOnline() {
-//first check if the game is over and display end of game info if so
-		if(gameOver==true) {
-			gameState = displayGameEnd();
-		}else {
-//if not display the start of round info and wait for response from user
-			roundNum++;
-			gameState = displayRoundStart(); 
-			if(players.get(activePlayer)instanceof HumanPlayer) {
-				gameState = gameState + "It is your turn, please pick a category.";
-//
-//Maybe put the categories are... part in here for online version. Would like to get them displayed on the buttons though
-//
-			}else {
-				gameState = gameState + "It is Player " + players.get(activePlayer).getID() + "'s turn, press any button to continue.";
-			}
-		}
-	}
-
-//used by the online version to display the results of each round
-	public void finishRoundOnline() {
-		displayRoundResult(wonRound, catPicked);
-		displayWinningCard(winner, catPicked);
-	}
 
 //used by both command line and web based versions to play through the details of a round once a category has been picked
 	public void playRound(int categoryPicked) {
@@ -239,20 +208,6 @@ public class Game {
 	}
 
 
-//builds up the gameState String to display the right details at the start of each round 
-	public String displayRoundStart() {
-		gameState = "Round " + roundNum + "\n" + "Round " + roundNum + ": Players have drawn their cards\n";
-//if the human player is still in the game display the card they drew and how many cards they have in their hand
-		if(players.get(humanPlayer) instanceof HumanPlayer) {
-			gameState = gameState + "You drew '" + players.get(humanPlayer).getTopCard().getName() + "':\n";
-			for(int i=0;i<categories.length;i++) {
-				gameState = gameState + "\t> " + categories[i] + ": " + players.get(humanPlayer).getTopCard().getAttributeValue(i) +"\n";
-			}
-			gameState = gameState +"There are '" + players.get(humanPlayer).getHand().getSize() + " cards in your deck\n";
-		}
-		return gameState;
-	}
-
 //takes the category picked by the active player and returns the player who won the round
 //if the round is a draw winning player remains the same 
 	public Player findWinningPlayer(int catPicked) {
@@ -283,57 +238,6 @@ public class Game {
 			numberOfDraws++;
 		}
 		return wonRound;
-	}
-
-//builds up the gameState String to display the right details at the end of each round
-	public void displayRoundResult(Player wonRound, int catPicked) {
-//if the round was a draw tell the user and give size of communal pile
-//if the user won tell them
-//if an AI won tell the user which one
-		if(isDraw==true){
-			gameState = "Round " + roundNum + ": This round is a draw, common pile now has " + communalPile.getSize() + " cards\n" ;
-		}else if(wonRound instanceof HumanPlayer) {
-			gameState = "Round " + roundNum +": Player you won this round\n";
-		}else {
-			gameState = "Round " + roundNum + ": Player " + wonRound.getID() + " won this round\n";
-		}	
-	}
-
-//Adds to gameState String to display the winning card for each round, will also display the card that drew a drawn round
-	public String displayWinningCard(Card winner, int categoryPicked) {
-		gameState = gameState + "The winning card was: '" + winner.getName() + "'\n";
-//iterate through the attributes of the winning card
-		for(int i=0;i<categories.length;i++) {
-//if this was the winning attribute add visual indicator
-			if(categoryPicked == i) {
-				gameState = gameState + "\t> " + categories[i] + ": " + winner.getAttributeValue(i) + " <--\n";
-			}else {
-				gameState = gameState + "\t> " + categories[i] + ": " + winner.getAttributeValue(i) + "\n";
-			}
-		}
-		return gameState;
-	}
-
-//builds up the gameState String to display the game info once the game is over
-	public String displayGameEnd() {
-		gameState = "\n\nGame End\n\n";
-//display who the winner of the game was
-		if(players.get(0) instanceof AIPlayer) {
-			gameState = gameState + "The overall winner was AI player " + players.get(0).getID() + "\n";
-		}else {
-			gameState = gameState + "Congratulations you won!\n";
-		}
-//iterate through the players using the startingPlayers Array(So that all the players are there,
-//as only one player will be left in the players arraylist at this point) showing their rounds won
-		gameState = gameState + "Scores:\n";
-		for(int i=0;i<startingPlayers.length;i++) {
-			if(startingPlayers[i] instanceof AIPlayer) {
-				gameState = gameState + "\tAI Player " + startingPlayers[i].getID() + ": " + startingPlayers[i].getRoundsWon() + "\n";
-			}else {
-				gameState = gameState + "\tYou: " + startingPlayers[i].getRoundsWon() + "\n";
-			}
-		}
-		return gameState;
 	}
 
 //gives the top cards of all players to the winner of the round
@@ -408,9 +312,10 @@ public class Game {
 	}
 
 //returns the gameState string to the API for display on the web based version
-	public String toString() {
-		return gameState;
-	}
+//	public String toString() {
+//		GameDisplay currentGame = new GameDisplay();
+//		return currentGame.getGameState();
+//	}
 	
 	
 	
