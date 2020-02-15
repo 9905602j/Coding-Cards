@@ -8,7 +8,10 @@ import java.sql.Connection;
 
 
 public class DBHandler {
-
+	private static String connectionString = "jdbc:postgresql://52.24.215.108/CodingCards";
+	private static String dbUsername = "CodingCards";
+	private static String dbPassword = "CodingCards";
+// Main method used for testing
 //		public static void main(String[]args) throws SQLException{
 //			DBHandler insert = new DBHandler();
 ////			insert.addGameToDB();
@@ -16,19 +19,21 @@ public class DBHandler {
 //		}
 		
 		public void addGameToDB(int numOfDraws, int numOfRounds, boolean humanWon) {
+// variables used during testing
 //			int numOfDraws = 17;
 //			int numOfRounds = 78;
 //			boolean humanWon = false;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
+				Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
 				PreparedStatement insert = connection.prepareStatement("Insert into persistantgamedata(totalrounds, totaldraws, winner) values (?,?,?)");
 					insert.setInt(1,  numOfRounds);
 					insert.setInt(2, numOfDraws);
 					insert.setBoolean(3, humanWon);
 					int i = insert.executeUpdate();
-					if(i>0) {
-						System.out.println("Insert complete");
-					}
+//	Test code to check insert is working
+//					if(i>0) {
+//						System.out.println("Insert complete");
+//					}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -48,7 +53,7 @@ public class DBHandler {
 		public int gamesPlayed() {
 			int allGames = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
+				Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
 				PreparedStatement getGamesPlayed = connection.prepareStatement("SELECT COUNT(totalRounds) from persistantgamedata");
 				ResultSet gamesPlayed = getGamesPlayed.executeQuery();
 				if(gamesPlayed.next()) {
@@ -64,7 +69,7 @@ public class DBHandler {
 		public int humanWins() {
 			int humanWins= 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
+				Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
 				PreparedStatement getHumanWins = connection.prepareStatement("SELECT COUNT (winner) from persistantgamedata WHERE winner IS true");
 				ResultSet numOfHumanWins = getHumanWins.executeQuery();
 				if(numOfHumanWins.next()) {
@@ -80,7 +85,7 @@ public class DBHandler {
 		public int AIWins() {
 			int AIWins = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
+				Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
 				PreparedStatement getAIWins = connection.prepareStatement("SELECT COUNT (winner) from persistantgamedata WHERE winner IS false");
 				ResultSet numOfAIWins = getAIWins.executeQuery();
 				if(numOfAIWins.next()) {
@@ -98,7 +103,7 @@ public class DBHandler {
 			int totalDraws = 0;
 			int totalGames = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
+				Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
 				PreparedStatement getDraws = connection.prepareStatement("SELECT SUM(totaldraws) FROM persistantgamedata");
 				ResultSet allDraws = getDraws.executeQuery();
 				if(allDraws.next()) {
@@ -117,7 +122,7 @@ public class DBHandler {
 		public int longestGame() {
 			int longestGame = 0;
 			try {
-				Connection connection = DriverManager.getConnection("jdbc:postgresql://52.24.215.108/CodingCards","CodingCards","CodingCards");
+				Connection connection = DriverManager.getConnection(connectionString, dbUsername, dbPassword);
 				PreparedStatement getLongestGame = connection.prepareStatement("SELECT MAX(totalRounds) FROM persistantgamedata");
 				ResultSet mostRounds = getLongestGame.executeQuery();
 				if(mostRounds.next()) {

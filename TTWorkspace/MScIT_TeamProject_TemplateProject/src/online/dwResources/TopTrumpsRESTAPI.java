@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import game.Game;
+import game.GameController;
 import game.HumanPlayer;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
@@ -40,6 +41,7 @@ public class TopTrumpsRESTAPI {
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	
 	Game game;
+	GameController controller;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -52,6 +54,7 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initalization here
 		// ----------------------------------------------------
 		this.game = game;
+		controller = new GameController(game);
 	}
 	
 	// ----------------------------------------------------
@@ -65,8 +68,8 @@ public class TopTrumpsRESTAPI {
 // AND RETURN THE PROGRESS ON THE GAME AS A STRING
 //So right now it runs the start of the round and displays the appropriate info to the user
 //then the program waits for input, when it gets it it calls choose category below
-		game.startRoundOnline();
-		return oWriter.writeValueAsString(game.toString());
+		controller.startRoundOnline();
+		return oWriter.writeValueAsString(controller.toString());
 	}
 	
 	@POST
@@ -75,8 +78,8 @@ public class TopTrumpsRESTAPI {
 //once input has been given by the user it is passed to the game and processed
 		game.playRound(category - 1);
 //gets the gameState to update and then passes the new String back to the API for display
-		game.finishRoundOnline();
-		return oWriter.writeValueAsString(game.toString());
+		controller.finishRoundOnline();
+		return oWriter.writeValueAsString(controller.toString());
 	}
 	
 	@GET

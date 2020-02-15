@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import game.DBHandler;
 import game.Game;
+import game.GameController;
 
 /**
  * Top Trumps command line application
@@ -28,7 +29,7 @@ public class TopTrumpsCLIApplication {
 		// State
 		boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
 		
-		TopTrumpsCLIApplication start = new TopTrumpsCLIApplication();
+//		TopTrumpsCLIApplication start = new TopTrumpsCLIApplication();
 		
 		// Loop until the user wants to exit the game
 		while (!userWantsToQuit) {
@@ -36,33 +37,11 @@ public class TopTrumpsCLIApplication {
 			// ----------------------------------------------------
 			// Add your game logic here based on the requirements
 			// ----------------------------------------------------
-			
-			userWantsToQuit = start.gameOrStats(writeGameLogsToFile);
+			GameController newGame = new GameController(writeGameLogsToFile);
+			userWantsToQuit = newGame.gameOrStats(writeGameLogsToFile);
 			
 		}
 	}
-//find out if the player would like to play, view stats or quit
-	public boolean gameOrStats(boolean writeLog) {
-//get the players choice
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Do you want to see past results or play a game?\n\t1: Print Game Statistics\n\t2: Play Game\n\t3: Quit\nEnter the number for your selection:");
-		int gameOrStats = scanner.nextInt();
-		System.out.println(gameOrStats);//print for testing
-//display stats		
-		if(gameOrStats==1) {
-//			System.out.println("Program will now display stats");//print for testing
-			DBHandler stats = new DBHandler();
-			System.out.println(stats.displayGameStats());
-			return false;
-//start game
-		}else if(gameOrStats==2) {
-			Game game = new Game(writeLog, false);
-			game.playCL();
-			return false;
-		}
-// If the user wants to quit, gameOrStats == 3 here
-		return true;
-		
-	}
+
 
 }
