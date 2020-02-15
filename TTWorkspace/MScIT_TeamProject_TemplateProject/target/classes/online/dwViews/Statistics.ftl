@@ -23,6 +23,112 @@
     <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
     	<div class="container">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top Trump Game</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="styling.css" rel="stylesheet">
+<body>
+	<div id="title" style="height:50px" widthclass="content">
+		<h2>     Top Trumps Game</h2>
+	</div>
+
+
+<div id="body" class="img">
+
+
+<div style="float: left; width: 15%;">
+	<p></p>
+</div>
+
+	<div style=" float: left; width: 70%;">
+<p></p>
+			<p></p>
+			<div id="description" class = "head_stats">
+				<h3> Game Statistics </h3>
+			</div>
+			<div id="description" class = "description_stats">
+				<h7> <ul><li> Number of Games: 3 </li>
+					<p><li> Number of Human Wins: 5 </li>
+					<p><li> Number of AI Wins: 2 </li>
+					<p><li> Average Draws per Game: 0 </li>
+					<p><li> Longest Game: 72 </li>
+				</ul>
+
+				 </h7>
+			</div>
+			<div>
+			<br><br><br><br>
+			<button onclick="goToMain()" class = "goToMain"> Go Back to the Main </button>
+			</div>
+			</div>
+<div style="float: left; width: 15%;">
+	<p></p>
+</div>
+</div>
+</div>
+
+</body>
+
+		<style type="text/css">
+
+
+		.head_stats {
+
+		height: 30px;
+		border: 1px;
+		border-radius: 2px;
+		text-align: center;
+		vertical-align: center;
+		background-color: grey;
+		color:black;
+		}
+
+		.selectButton:hover {
+		background-color: #777;
+		}
+
+
+		.description_stats {
+
+		height: 250px;
+		border: 1px solid: grey;
+		border-radius: 1px;
+		vertical-align: center;
+		background-color: white;
+		color:black;
+		}
+
+
+		.img{
+		position: relative;
+		background-image: url(/assets/bg.jpg);                                                               
+		height: 100vh;
+		background-size: cover;
+		}
+
+		#title {
+		background-color: #2c2c2c;
+		color: white;
+		text-align: center;
+		}
+		
+		.goToMain {
+		width: 170px;
+		border: 1px;
+		border-radius: 7px;
+		text-align: center;
+		vertical-align: center;
+		background-color: #2c2c2c;
+		color:white;
+		}
+
+
+
+		</style>
 
 			<!-- Add your HTML Here -->
 		
@@ -38,11 +144,10 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
-				
 			}
-			
+				function goToMain(){
+		    	window.location.href="http://localhost:7777/toptrumps/"
+		    	}
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
